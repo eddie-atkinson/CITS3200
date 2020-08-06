@@ -3,7 +3,7 @@ import App from "./../src/App.vue" // page being tested - Change this when vue i
 
 /*
 None of the following will work until vue is appropriately installed and configured
-REF https://jestjs.io/docs/en/getting-started for jest guide
+REF https://jestjs.io/docs/en/getting-started for jest guide :)
 */
 
 describe("App", () => {
