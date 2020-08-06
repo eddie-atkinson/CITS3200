@@ -1,0 +1,23 @@
+{
+  "name": "cits3200",
+  "version": "1.0.0",
+  "description": "CITS3200 Conference Programme Converter",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^26.2.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddie-atkinson/CITS3200.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddie-atkinson/CITS3200/issues"
+  },
+  "homepage": "https://github.com/eddie-atkinson/CITS3200#readme"
+}
