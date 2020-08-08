@@ -11,8 +11,7 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "lintjs": "./node_modules/.bin/eslint . --fix"
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
@@ -57,7 +56,14 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "import/no-extraneous-dependencies": [
+        "error", 
+        {
+          "devDependencies": true
+        }
+      ]
+    },
     "overrides": [
       {
         "files": [

@@ -5,9 +5,9 @@
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and hot-reloads for development in electron
 ```
-npm run serve
+npm run electron:serve
 ```
 
 ### Compiles and minifies for production
