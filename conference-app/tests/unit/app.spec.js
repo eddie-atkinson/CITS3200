@@ -13,9 +13,23 @@ describe('App', () => {
 });
 
 describe('Mounted App', () => {
-  const wrapper = mount(App); // wraps our particular html document for element access
+  /*
+  it('has correct title', () => {
+    const wrapper = mount(App, {
+      propsData: {
+        title: 'conference-app',
+      }
+    }); // wraps our particular html document for element access
+  })
+  */
+
+  it('matches last snapshot', () => {
+    const wrapper = mount(App);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
 
   test('is instantiated', () => {
+    const wrapper = mount(App);
     expect(wrapper.vm).toBeTruthy();
   });
 
