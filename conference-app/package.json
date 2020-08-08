@@ -95,11 +95,11 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
+      "vue-cli-service lint",
       "git add"
     ],
     "*.vue": [
-      "npm run lint",
+      "vue-cli-service lint",
       "git add"
     ]
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn class='text-transform uppercase'>Hello world!</v-btn>
+    <v-btn class='text-transform uppercase'>Hello vue!</v-btn>
   </div>
 </template>
 
