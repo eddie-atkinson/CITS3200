@@ -37,6 +37,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
+    "lint-staged": "^10.2.11",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
@@ -58,7 +59,7 @@
     },
     "rules": {
       "import/no-extraneous-dependencies": [
-        "error", 
+        "error",
         {
           "devDependencies": true
         }
@@ -88,5 +89,18 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }

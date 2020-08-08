@@ -67,6 +67,7 @@ app.on('ready', async () => {
     try {
       await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
