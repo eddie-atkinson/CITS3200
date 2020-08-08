@@ -37,6 +37,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
@@ -95,12 +96,17 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
+      "vue-cli-service lint",
       "git add"
     ],
     "*.vue": [
-      "npm run lint",
+      "vue-cli-service lint",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
