@@ -1,0 +1,13 @@
+{
+	"settings": {
+		"import/core-modules": [
+			"electron"
+		]
+	},
+	"parserOptions": {
+		"parser": "babel-eslint"
+	},
+	"extends": [
+		"plugin:vue/base"
+	]
+}
