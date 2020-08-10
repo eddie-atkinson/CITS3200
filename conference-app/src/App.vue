@@ -18,6 +18,12 @@
       >
         Home
       </v-btn>
+      <v-btn
+        to='/Form1'
+        text
+      >
+        Form
+      </v-btn>
     </v-app-bar>
     <v-main>
       <router-view>
