@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-btn class='text-transform uppercase'>Hello vue!</v-btn>
     <v-stepper v-model='stepNum'>
       <v-stepper-header>
         <v-stepper-step
