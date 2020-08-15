@@ -15,7 +15,7 @@
           >
             Conference Programme Creator
           </v-card-title>
-          <v-card-content
+          <v-card-text
           class='text-subtitle-1'
           >
            <p>
@@ -31,7 +31,7 @@
                Get started
              </v-btn>
            </v-card-actions>
-          </v-card-content>
+          </v-card-text>
         </v-card>
       </v-row>
     </v-container>
