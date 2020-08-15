@@ -7,16 +7,10 @@
     >
       <v-spacer></v-spacer>
       <v-btn
-        to="/about"
+        to="/"
         text
       >
-        About
-      </v-btn>
-      <v-btn
-        to='/'
-        text
-      >
-        Home
+        Start over
       </v-btn>
     </v-app-bar>
     <v-main>
