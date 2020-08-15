@@ -5,6 +5,21 @@
       color="primary"
       dark
     >
+      <v-btn
+      text
+      @click='$vuetify.theme.dark=!$vuetify.theme.dark'
+      >
+        <v-icon
+        v-show='!$vuetify.theme.dark'
+        >
+          mdi-lightbulb-cfl-off
+        </v-icon>
+        <v-icon
+        v-show='$vuetify.theme.dark'
+        >
+          mdi-lightbulb-cfl
+        </v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn
         to="/"
@@ -29,7 +44,6 @@ export default {
   },
 
   data: () => ({
-    //
   }),
   methods: {
   },
