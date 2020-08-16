@@ -64,6 +64,7 @@
   </div>
 </template>
 <script>
+import parseExcel from '@/helpers/parse-excel';
 
 export default {
   data() {
@@ -71,6 +72,7 @@ export default {
       step: 1,
       valid: false,
       excelData: null,
+      jsonData: null,
       loading: false,
     };
   },
@@ -84,15 +86,22 @@ export default {
     },
   },
   methods: {
-    async loadFile(event) {
-      const file = event;
+    async loadFile(file) {
+      // Check if they've deleted a selection and return immediately
+      if (!file) return;
       const reader = new FileReader();
       this.loading = true;
-      reader.onload = (e) => {
-        this.excelData = e.target.result;
+      reader.onload = (event) => {
+        this.excelData = event.target.result;
+        this.jsonData = parseExcel(this.excelData);
+        // console.log(this.jsonData);
+        this.loading = false;
+      };
+      reader.onerror = (err) => {
+        // eslint-disable-next-line
+        console.error(err);
       };
       await reader.readAsBinaryString(file);
-      this.loading = false;
     },
   },
 };
