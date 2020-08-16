@@ -64,14 +64,13 @@
   </div>
 </template>
 <script>
-import parseExcel from '@/helpers/parse-excel';
+import { parseExcel } from '@/helpers/parse-excel';
 
 export default {
   data() {
     return {
       step: 1,
       valid: false,
-      excelData: null,
       jsonData: null,
       loading: false,
     };
@@ -92,9 +91,7 @@ export default {
       const reader = new FileReader();
       this.loading = true;
       reader.onload = (event) => {
-        this.excelData = event.target.result;
-        this.jsonData = parseExcel(this.excelData);
-        // console.log(this.jsonData);
+        this.jsonData = parseExcel(event.target.result);
         this.loading = false;
       };
       reader.onerror = (err) => {
