@@ -22,10 +22,11 @@
             :value='1'
             >
               <v-card-text>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Sapiente in tempora doloremque maiores molestiae,
-                ad officia facilis? Fuga, fugit? Dolores ducimus
-                labore rem cupiditate illum harum sunt est dicta laboriosam?
+                <v-file-input
+                accept='.xlsx'
+                @change='loadFile'
+                >
+                </v-file-input>
               </v-card-text>
             </v-window-item>
 
@@ -52,6 +53,7 @@
             <v-btn
             :disabled='step === 2'
             @click='step++'
+            :loading='loading'
             >
               Next
             </v-btn>
@@ -62,19 +64,35 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
       step: 1,
+      valid: false,
+      excelData: null,
+      loading: false,
     };
   },
   computed: {
     currentTitle() {
       switch (this.step) {
-        case 1: return 'Hello world';
+        case 1: return 'Select your Excel file for conversion';
         case 2: return 'Select your favourite color';
         default: return 'Need to define the title correctly';
       }
+    },
+  },
+  methods: {
+    async loadFile(event) {
+      const file = event;
+      const reader = new FileReader();
+      this.loading = true;
+      reader.onload = (e) => {
+        this.excelData = e.target.result;
+      };
+      await reader.readAsBinaryString(file);
+      this.loading = false;
     },
   },
 };
