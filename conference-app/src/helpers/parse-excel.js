@@ -1,8 +1,14 @@
 import XLSX from 'xlsx';
 
-export default function parseExcel(data) {
-  const workbook = XLSX.read(data, {
+export function parseExcel(data) {
+  return XLSX.read(data, {
     type: 'binary',
   });
-  console.log(workbook);
+}
+
+export function buildHTML(workbook) {
+  return XLSX.write(workbook, {
+    type: 'binary',
+    bookType: 'html',
+  });
 }
