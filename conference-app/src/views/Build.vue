@@ -34,10 +34,11 @@
             :value='2'
             >
               <v-card-text>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Sapiente in tempora doloremque maiores molestiae,
-                ad officia facilis? Fuga, fugit? Dolores ducimus
-                labore rem cupiditate illum harum sunt est dicta laboriosam?
+                <v-select
+                :items='colours'
+                label='Select a colour'
+                >
+                </v-select>
               </v-card-text>
             </v-window-item>
           </v-window>
@@ -73,6 +74,13 @@ export default {
       valid: false,
       jsonData: null,
       loading: false,
+      colours: [
+        'Blue',
+        'Orange',
+        'Turquoise',
+        'Purple',
+        'Green',
+      ],
     };
   },
   computed: {
