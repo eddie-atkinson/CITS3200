@@ -24,6 +24,7 @@
               <v-card-text>
                 <v-file-input
                 accept='.xlsx'
+                :rules='[validation.required]'
                 @change='loadFile'
                 >
                 </v-file-input>
@@ -36,6 +37,7 @@
               <v-card-text>
                 <v-select
                 :items='colours'
+                v-model='favouriteColour'
                 label='Select a colour'
                 >
                 </v-select>
@@ -81,6 +83,10 @@ export default {
         'Purple',
         'Green',
       ],
+      favouriteColour: '',
+      validation: {
+        required: (value) => !!value || 'This field is required',
+      },
     };
   },
   computed: {
