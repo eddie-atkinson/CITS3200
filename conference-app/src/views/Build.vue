@@ -6,62 +6,44 @@
       justify='center'
       class='mt-4'
       >
-        <v-card
-        round
-        class='pa-3 mx-auto'
-        min-width='500'
-        max-width='500'
+        <v-form
+        v-model='valid'
         >
-          <v-card-title>
-            {{ currentTitle }}
-          </v-card-title>
-          <v-window
-          v-model='step'
+          <v-card
+          round
+          class='pa-3 mx-auto'
+          min-width='500'
+          max-width='500'
           >
-            <v-window-item
-            :value='1'
-            >
-              <v-card-text>
-                <v-file-input
-                accept='.xlsx'
-                :rules='[validation.required]'
-                @change='loadFile'
-                >
-                </v-file-input>
-              </v-card-text>
-            </v-window-item>
-
-            <v-window-item
-            :value='2'
-            >
-              <v-card-text>
-                <v-select
-                :items='colours'
-                v-model='favouriteColour'
-                label='Select a colour'
-                >
-                </v-select>
-              </v-card-text>
-            </v-window-item>
-          </v-window>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn
-            :disabled='step === 1'
-            @click='step--'
-            >
-              Previous
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-            :disabled='step === 2'
-            @click='step++'
-            :loading='loading'
-            >
-              Next
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+            <v-card-title>
+              Select your Excel file for conversion
+            </v-card-title>
+            <v-card-text>
+              <v-file-input
+              accept='.xlsx'
+              :rules='[validation.required, validation.fileName]'
+              @change='loadFile'
+              >
+              </v-file-input>
+              <v-select
+              :items='colours'
+              v-model='favouriteColour'
+              label='Select a colour'
+              >
+              </v-select>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+              :disabled='!valid'
+              :loading='loading'
+              >
+                Submit
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-form>
       </v-row>
     </v-container>
   </div>
@@ -72,7 +54,6 @@ import { parseExcel } from '@/helpers/parse-excel';
 export default {
   data() {
     return {
-      step: 1,
       valid: false,
       jsonData: null,
       loading: false,
@@ -86,17 +67,11 @@ export default {
       favouriteColour: '',
       validation: {
         required: (value) => !!value || 'This field is required',
+        fileName: (value) => value === undefined || value.name.endsWith('.xlsx') || 'Files must be .xlsx',
       },
     };
   },
   computed: {
-    currentTitle() {
-      switch (this.step) {
-        case 1: return 'Select your Excel file for conversion';
-        case 2: return 'Select your favourite color';
-        default: return 'Need to define the title correctly';
-      }
-    },
   },
   methods: {
     async loadFile(file) {
