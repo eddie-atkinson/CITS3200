@@ -8,7 +8,6 @@
       >
         <v-card
         class='pa-3'
-        round
         >
           <v-card-title
           class='text-h4'
@@ -25,7 +24,6 @@
            <p> To get started building your own conference programme click below!</p>
            <v-card-actions>
              <v-btn
-             round
              to='/build'
              >
                Get started

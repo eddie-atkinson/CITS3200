@@ -10,16 +10,21 @@
         v-model='valid'
         >
           <v-card
-          round
           class='pa-3 mx-auto'
           min-width='500'
           max-width='500'
           >
             <v-card-title>
-              Select your Excel file for conversion
+              Add files and select themes
             </v-card-title>
             <v-card-text>
+              <p>
+                It's easy to convert your spreadsheet to a conference programme,
+                simply select the excel programme you wish to convert and select your
+                favourite colour for the theme.
+              </p>
               <v-file-input
+              label='Select your Excel file for conversion'
               accept='.xlsx'
               :rules='[validation.required, validation.fileName]'
               @change='loadFile'
@@ -28,7 +33,8 @@
               <v-select
               :items='colours'
               v-model='favouriteColour'
-              label='Select a colour'
+              :rules='[validation.required]'
+              label='Select your favourite colour'
               >
               </v-select>
             </v-card-text>
