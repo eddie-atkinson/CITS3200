@@ -34,7 +34,7 @@ describe('Mounted App', () => {
       localVue,
       vuetify,
       router,
-    }); // Mount our App.vue for testing
+    });
 
     expect(wrapper.vm).toBeTruthy();
   });
@@ -53,9 +53,9 @@ describe('Mounted App', () => {
       localVue,
       vuetify,
       router,
-    }); // Mount our App.vue for testing
+    }); // includes child elements
 
-    const bodyWrapper = wrapper.find('div'); // see above
+    const bodyWrapper = wrapper.find('div');
 
     const darkModeButton = wrapper.find('.v-btn');
     expect(darkModeButton.exists()).toBe(true); // we can find our button correctly
@@ -78,7 +78,7 @@ describe('Mounted App', () => {
       localVue,
       vuetify,
       router,
-    }); // Mount our App.vue for testing
+    });
 
     expect(wrapper.html()).toMatchSnapshot();
   });

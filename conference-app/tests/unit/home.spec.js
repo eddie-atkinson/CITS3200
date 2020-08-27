@@ -26,7 +26,8 @@ describe('Home View', () => {
     const wrapper = shallowMount(Home, {
       localVue,
       vuetify,
-    }); // Mount our Home.vue for testing
+    });
+
     expect(wrapper.vm).toBeTruthy(); // Home component correctly instantiates
   });
 
