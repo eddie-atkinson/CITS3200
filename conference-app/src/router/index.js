@@ -6,11 +6,13 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    title: 'Conference Converter - Home',
     path: '/',
     name: 'Home',
     component: Home,
   },
   {
+    title: 'Conference Conference - Build',
     path: '/build',
     name: 'Build',
     component: () => import('@/views/Build.vue'),
