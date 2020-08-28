@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mounted App matches last snapshot 1`] = `
+<v-app-stub id="app">
+  <v-app-bar-stub color="primary" dark="true" tag="header" extensionheight="48" src="" value="true" app="true">
+    <v-btn-stub tag="button" activeclass="" text="true" type="button">
+      <v-icon-stub>
+        mdi-lightbulb-cfl-off
+      </v-icon-stub>
+      <v-icon-stub>
+        mdi-lightbulb-cfl
+      </v-icon-stub>
+    </v-btn-stub>
+    <v-spacer-stub></v-spacer-stub>
+    <v-btn-stub tag="button" activeclass="" to="/" text="true" type="button">
+      Start over
+    </v-btn-stub>
+  </v-app-bar-stub>
+  <v-main-stub tag="main">
+    <router-view-stub name="default"></router-view-stub>
+  </v-main-stub>
+</v-app-stub>
+`;
