@@ -88,7 +88,7 @@
               <v-divider></v-divider>
               <v-card-actions>
                 <v-btn
-                @click='step--'
+                @click='goBack'
                 >
                   Go back
                 </v-btn>
@@ -165,6 +165,10 @@ export default {
     },
     getFileNames(ext) {
       return `${this.fileName}.${ext}`;
+    },
+    goBack() {
+      this.step -= 1;
+      this.releaseURL();
     },
   },
 };
