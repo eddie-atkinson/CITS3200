@@ -12,7 +12,7 @@ const routes = [
     component: Home,
   },
   {
-    title: 'Conference Conference - Build',
+    title: 'Conference Converter - Build',
     path: '/build',
     name: 'Build',
     component: () => import('@/views/Build.vue'),
