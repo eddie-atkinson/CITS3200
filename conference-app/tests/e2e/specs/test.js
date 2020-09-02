@@ -1,14 +1,15 @@
 // https://docs.cypress.io/api/introduction/api.html
 
 describe('My First Test', () => {
-  it('Visits the app root url', () => {
+  it('correctly starts over', () => {
     cy.visit('/');
-    cy.contains('.v-btn__content', 'Hello vue!');
+    cy.get('.v-btn__content').contains('Start over').click();
+    cy.contains('.v-card__title', 'Conference Programme Creator');
   });
 
-  it('Navbar Navigation', () => {
+  it('correctly gets started', () => {
     cy.visit('/');
-    cy.get('.v-btn').contains('About').click();
-    cy.contains('h1', 'This is an about page');
+    cy.get('.v-btn__content').contains('Get started').click();
+    cy.contains('.v-card__title', 'Add files and select themes');
   });
 });
