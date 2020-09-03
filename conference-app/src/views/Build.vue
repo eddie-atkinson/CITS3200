@@ -32,6 +32,7 @@
                 <v-file-input
                 label='Select your Excel file for conversion'
                 accept='.xlsx'
+                id='input-file-field'
                 :rules='[validation.required, validation.fileName]'
                 @change='loadFile'
                 >
@@ -39,6 +40,7 @@
                 <v-select
                 :items='colours'
                 v-model='favouriteColour'
+                id='colour-input-field'
                 :rules='[validation.required]'
                 label='Select your favourite colour'
                 >
@@ -50,6 +52,7 @@
                 <v-btn
                 :disabled='!valid || loading'
                 :loading='loading'
+                id='build-programme-btn'
                 @click='buildProgramme'
                 >
                   Build programme

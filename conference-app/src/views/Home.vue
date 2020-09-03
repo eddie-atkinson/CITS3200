@@ -25,6 +25,7 @@
            <v-card-actions>
              <v-btn
              to='/build'
+             id='get-started-btn'
              >
                Get started
              </v-btn>

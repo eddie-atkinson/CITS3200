@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'; // Change this w
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
 import Vue from 'vue';
-import Home from '../../src/views/Home.vue'; // page being tested
+import Home from '@/views/Home.vue'; // page being tested
 
 Vue.use(Vuetify);
 
