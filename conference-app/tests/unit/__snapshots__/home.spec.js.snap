@@ -15,7 +15,7 @@ exports[`Home View matches last snapshot 1`] = `
           </p>
           <p> To get started building your own conference programme click below!</p>
           <v-card-actions-stub>
-            <v-btn-stub tag="button" activeclass="" to="/build" type="button">
+            <v-btn-stub tag="button" activeclass="" to="/build" type="button" id="get-started-btn">
               Get started
             </v-btn-stub>
           </v-card-actions-stub>

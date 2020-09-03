@@ -2,13 +2,13 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'; // Change this w
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
 import Vue from 'vue';
-import Home from '../../src/views/Home.vue'; // page being tested - Change this when vue init
+import Home from '@/views/Home.vue'; // page being tested
 
 Vue.use(Vuetify);
 
 /*
-None of the following will work until vue is appropriately installed and configured
 REF https://jestjs.io/docs/en/getting-started for jest guide :)
+REF https://vue-test-utils.vuejs.org/ for vue-jest-utils docs
 */
 
 const localVue = createLocalVue();
@@ -52,7 +52,8 @@ describe('Home View', () => {
     const wrapper = shallowMount(Home, {
       localVue,
       vuetify,
-    }); // Mount our Home.vue for testing
+    });
+
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
