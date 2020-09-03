@@ -28,6 +28,11 @@
              >
                Get started
              </v-btn>
+             <v-btn
+             to='/temp'
+             >
+               temp
+             </v-btn>
            </v-card-actions>
           </v-card-text>
         </v-card>

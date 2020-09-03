@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import temp from '../views/temp.vue';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,12 @@ const routes = [
     path: '/build',
     name: 'Build',
     component: () => import('@/views/Build.vue'),
+  },
+  {
+    title: 'Conference Converter - temp',
+    path: '/temp',
+    name: 'temp',
+    component: temp,
   },
 ];
 

@@ -1,0 +1,64 @@
+{
+    "Sheet1": [
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:30",
+            "SPEECH_END": "9/3/19 10:50",
+            "SESSION_NUMBER": "Session 1",
+            "DESCRIPTION": "Current practice and innovation in decommissioning, rehabilitation and monitoring on Barrow Island – applications for mine closure",
+            "SPEAKER": "DA Jasper, Stantec, Australia"
+        },
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:30",
+            "SPEECH_END": "9/3/19 10:50",
+            "SESSION_NUMBER": "Session 2",
+            "DESCRIPTION": "Geotechnical Risk Management for Open Pit Mine Closure: a Sub-Arctic and Semi-Arid Case Study ",
+            "SPEAKER": "P.J.H. de Graaf, De Beers Group\r\n- Anglo American, South Africa"
+        },
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:30",
+            "SPEECH_END": "9/3/19 10:50",
+            "SESSION_NUMBER": "Session 3",
+            "DESCRIPTION": "Social provisioning for mine closure\r\n",
+            "SPEAKER": "T Laurencont, Coffey Ltd Australia"
+        },
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:50",
+            "SPEECH_END": "9/3/19 11:10",
+            "SESSION_NUMBER": "Session 1",
+            "DESCRIPTION": "Process-based erosion modelling for shoreline rehabilitation design of a coal mine pit lake",
+            "SPEAKER": "CD McCullough, Mine Lakes Consulting,\r\nAustralia"
+        },
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:50",
+            "SPEECH_END": "9/3/19 11:10",
+            "SESSION_NUMBER": "Session 2",
+            "DESCRIPTION": "Geotechnical considerations for the stability of open pit excavations at mine closure – some scenarios",
+            "SPEAKER": " I de Bruyn, D Prado,\r\nJ Mylvaganam, D Walker, SRK Consulting,\r\nAustralia"
+        },
+        {
+            "DAY_OF_CONFERENCE": "1",
+            "SESSION_START": "9/3/19 10:30",
+            "SESSION_END": "9/3/19 12:30",
+            "SPEECH_START": "9/3/19 10:50",
+            "SPEECH_END": "9/3/19 11:10",
+            "SESSION_NUMBER": "Session 3",
+            "DESCRIPTION": "Social aspects of mine closure: the elephant in the room",
+            "SPEAKER": " J Edwards, A Maritz, SRK\r\nConsulting (South Africa) (Pty) Ltd, South Africa"
+        }
+    ]
+}
