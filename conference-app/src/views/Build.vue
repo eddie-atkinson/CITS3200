@@ -50,7 +50,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                :disabled='!valid || loading'
+                :disabled='!valid || loading || error'
                 :loading='loading'
                 id='build-programme-btn'
                 @click='buildProgramme'
@@ -58,6 +58,7 @@
                   Build programme
                 </v-btn>
               </v-card-actions>
+              <span v-show='error' class='error--text'> {{ errorMsg }}</span>
             </v-card>
           </v-form>
         </v-window-item>
@@ -103,6 +104,7 @@
                   Finish
                 </v-btn>
               </v-card-actions>
+              <span v-show='error' class='error--text'> {{ errorMsg }}</span>
             </v-card>
         </v-window-item>
       </v-window>
@@ -120,6 +122,8 @@ export default {
       valid: false,
       jsonData: null,
       htmlBlob: null,
+      error: false,
+      errorMsg: '',
       fileName: '',
       loading: false,
       colours: [
@@ -144,15 +148,23 @@ export default {
       if (!file) return;
       // Strip the file extension from the file name
       this.fileName = file.name.replace(new RegExp('\\..*', 'i'), '');
+      // Reset the error state on new file upload
+      this.error = false;
       const reader = new FileReader();
       this.loading = true;
       reader.onload = (event) => {
-        this.jsonData = parseExcel(event.target.result);
+        try {
+          this.jsonData = parseExcel(event.target.result);
+        } catch (err) {
+          this.error = true;
+          this.errorMsg = err;
+        }
         this.loading = false;
       };
       reader.onerror = (err) => {
-        // eslint-disable-next-line
-        console.error(err);
+        this.error = true;
+        this.loading = false;
+        this.errorMsg = err;
       };
       await reader.readAsBinaryString(file);
     },
