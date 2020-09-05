@@ -113,8 +113,7 @@
   </div>
 </template>
 <script>
-import { parseExcel, buildHTML } from '@/helpers/parse-excel';
-import '@/helpers/build-html';
+import excelToHTML from '@/helpers/parse-excel';
 
 export default {
   data() {
@@ -155,7 +154,8 @@ export default {
       this.loading = true;
       reader.onload = (event) => {
         try {
-          this.jsonData = parseExcel(event.target.result);
+          // this.jsonData = parseExcel(event.target.result);
+          this.htmlData = excelToHTML(event.target.result);
         } catch (err) {
           this.error = true;
           this.errorMsg = err;
@@ -171,7 +171,7 @@ export default {
     },
     buildProgramme() {
       this.step += 1;
-      const blob = new Blob([buildHTML(this.jsonData)], {
+      const blob = new Blob([this.htmlData], {
         type: 'text/plain',
       });
       this.htmlBlob = window.URL.createObjectURL(blob);
