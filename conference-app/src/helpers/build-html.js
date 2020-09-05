@@ -1,10 +1,3 @@
-let tabl = document.createElement('table');
-let tabrow = document.createElement('tr');
-let tabhead = document.createElement('th');
-let tabdata = document.createElement('td');
-
-tabl.setAttribute('id', 'built');
-
 //  Dummy data
 let arr = [{
   'Name': 'Presentation 138',
@@ -27,55 +20,41 @@ let arr = [{
   'Speakers': 'B Horner,\nG Christie, Succession Ecology, Australia; B\nWilliams, Flinders Power, Australia; AT Scanlon,\nJ Lemon, Succession Ecology, Australia',
 }];
 
-function addAllColumnHeaders(data, table) {
-  let columnSet = [],
-    tr = tabrow.cloneNode(false);
-  for (let i = 0, l = data.length; i < l; i++) {
+let str =
+  '<!DOCTYPE html>\
+<html>\
+<head>\
+<meta charset="utf-8">\
+<meta name="viewport" content="width=device-width, initial-scale=1.0">\
+<title></title>\
+</head>\
+<body>\
+<table>'
+function buildHtmlTable(data) {
+  //make new row for headers
+  let columnSet = [];
+  let l = data.length;
+  for (let i = 0; i < l; i++) {
     for (let key in data[i]) {
       if (data[i].hasOwnProperty(key) && columnSet.indexOf(key) === -1) {
         columnSet.push(key);
-        let th = tabhead.cloneNode(false);
-        th.appendChild(document.createTextNode(key));
-        tr.appendChild(th);
+        str = str + '<tr><th>' + key + '</th></tr>';
       }
     }
   }
-  table.appendChild(tr);
-  return columnSet;
-}
-
-function buildHtmlTable(data) {
-  let table = tabl.cloneNode(false),
-    columns = addAllColumnHeaders(data, table);
   for (let i = 0, maxi = data.length; i < maxi; ++i) {
-    let tr = tabrow.cloneNode(false);
-    for (let j = 0, maxj = columns.length; j < maxj; ++j) {
-      let td = tabdata.cloneNode(false);
-      td.appendChild(document.createTextNode(data[i][columns[j]] || ''));
-      tr.appendChild(td);
+    for (let j = 0; j < columnSet.length; ++j) {
+
+      str = str + '<tr><td>' + data[i][columnSet[j]];
     }
-    table.appendChild(tr);
   }
-  return table;
+
+  str = str + '</body></html>'
+
+  // Check output in console
+  console.log(str);
+  return str;
 }
 
-function returnHTML() {
-  //  Just checking what it's returning
-  console.dir(document.documentElement.innerHTML);
+buildHtmlTable(arr);
 
-  return document.documentElement.innerHTML;
-}
-
-//  Function to call
-//  Builds and appends a table with the correct format to the current document then
-//  returns and removes it
-function buildTable(data) {
-  document.body.appendChild(buildHtmlTable(data));
-  returnHTML();
-  document.getElementById('built').remove();
-}
-
-//  Uncomment this to run
-//  buildTable(arr);
-
-export { buildHtmlTable, addAllColumnHeaders, returnHTML, buildTable };
