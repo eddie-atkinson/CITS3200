@@ -1,6 +1,41 @@
 import XLSX from 'xlsx';
 
-function excelToHTML(data) {
+function rowToHTML(headers, rowData) {
+  return (`<html>
+      <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <style>
+        table {
+          border: 1px solid black;
+          padding: 20px;
+        }
+        th, td {
+          padding: 20px;
+          margin: 10px;
+          border: 1px solid black;
+        }
+      </style>
+      <title></title>
+      </head>
+      <body>
+        <table>
+        <thead>
+          <tr>
+            <th>${headers.join('</th><th>')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowData.map((item) => `<tr><td>${Object.values(item).join('</td><td>')}</tr>`).join('')}
+        </tbody>
+        </table>
+      </body>
+      </html>
+  `);
+}
+
+export default function excelToHTML(data) {
   const wb = XLSX.read(data, {
     type: 'binary',
   });
@@ -10,26 +45,6 @@ function excelToHTML(data) {
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
   }
-  console.log(rowData);
   const headers = Object.keys(rowData[0]);
-  console.log(headers);
-
-  // TODO call function which converts data into HTML string
-  // return htmlString
+  return rowToHTML(headers, rowData);
 }
-
-function parseExcel(data) {
-  excelToHTML(data);
-  return XLSX.read(data, {
-    type: 'binary',
-  });
-}
-
-function buildHTML(workbook) {
-  return XLSX.write(workbook, {
-    type: 'binary',
-    bookType: 'html',
-  });
-}
-
-export { excelToHTML, parseExcel, buildHTML };
