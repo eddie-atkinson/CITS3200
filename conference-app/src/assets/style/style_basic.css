@@ -1,0 +1,47 @@
+body{
+    padding-left:20px;
+    padding-right:20px;
+    padding-top:20px;
+    font-family: "Century Gothic";
+
+}
+h1{
+
+    font-family: "Century Gothic";
+    font-weight:bold;
+}
+
+#session-header{
+
+    font-family: "Century Gothic";
+    font-weight:bold;
+
+}
+footer{
+    position:fixed;
+    width:100%;
+    bottom: 0px;
+    left:0;
+    text-align:center;
+    justify-content:center;
+    align-items:center;
+
+    height:40px;
+
+
+
+}
+.bottom_info{
+    float:left;
+
+
+}
+.bottom_img{
+    float:right;
+
+    height:200px;
+    width:auto;
+}
+h2{
+    text-align:left;
+}
