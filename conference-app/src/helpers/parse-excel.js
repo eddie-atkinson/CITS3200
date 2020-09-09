@@ -1,5 +1,11 @@
 import XLSX from 'xlsx';
-import { base, orange } from './styles';
+import {
+  base,
+  orange,
+  blue,
+  turq,
+  green,
+} from './styles';
 
 function generateRows(rowData, headers) {
   let returnString = '';
@@ -16,7 +22,16 @@ function generateRows(rowData, headers) {
   return returnString;
 }
 
-function rowToHTML(headers, rowData) {
+function fetchStyling(theme) {
+  let returnTheme = '';
+  if (theme === 'Blue') returnTheme = blue;
+  else if (theme === 'Orange') returnTheme = orange;
+  else if (theme === 'Turquoise') returnTheme = turq;
+  else if (theme === 'Green') returnTheme = green;
+  return returnTheme;
+}
+
+function rowToHTML(headers, rowData, theme) {
   return (`<html>
       <head>
       <meta charset="utf-8">
@@ -24,7 +39,7 @@ function rowToHTML(headers, rowData) {
       </head>
       <style>
         ${base}
-        ${orange}
+        ${fetchStyling(theme)}
       </style>
       <title></title>
       </head>
@@ -45,17 +60,16 @@ function rowToHTML(headers, rowData) {
   `);
 }
 
-export default function excelToHTML(data) {
+export default function excelToHTML(data, theme) {
   const wb = XLSX.read(data, {
     type: 'binary',
   });
   const sheetName = wb.SheetNames[0];
   const ws = wb.Sheets[sheetName];
-  console.log(ws[0]);
   const rowData = XLSX.utils.sheet_to_json(ws);
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
   }
   const headers = Object.keys(rowData[0]);
-  return rowToHTML(headers, rowData);
+  return rowToHTML(headers, rowData, theme);
 }
