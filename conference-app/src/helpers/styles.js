@@ -20,20 +20,9 @@ const base = `table a:link {
     text-shadow: 1px 1px 0px #fff;
     background:#eaebec;
     margin:20px;
-    border:#ccc 1px solid;
-
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
-    border-radius:3px;
-
-    -moz-box-shadow: 0 1px 2px #d1d1d1;
-    -webkit-box-shadow: 0 1px 2px #d1d1d1;
-    box-shadow: 0 1px 2px #d1d1d1;
   }
   table th {
     padding:21px 25px 22px 25px;
-    border-top:1px solid #fafafa;
-    border-bottom:1px solid #e0e0e0;
 
     background: #ededed;
     background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
@@ -44,14 +33,8 @@ const base = `table a:link {
     padding-left:20px;
   }
   table tr:first-child th:first-child {
-    -moz-border-radius-topleft:3px;
-    -webkit-border-top-left-radius:3px;
-    border-top-left-radius:3px;
   }
   table tr:first-child th:last-child {
-    -moz-border-radius-topright:3px;
-    -webkit-border-top-right-radius:3px;
-    border-top-right-radius:3px;
   }
   table tr {
     text-align: center;
@@ -64,9 +47,6 @@ const base = `table a:link {
   }
   table td {
     padding:18px;
-    border-top: 1px solid #ffffff;
-    border-bottom:1px solid #e0e0e0;
-    border-left: 1px solid #e0e0e0;
 
     background: #fafafa;
     background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
@@ -80,16 +60,6 @@ const base = `table a:link {
   table tr:last-child td {
     border-bottom:0;
   }
-  table tr:last-child td:first-child {
-    -moz-border-radius-bottomleft:3px;
-    -webkit-border-bottom-left-radius:3px;
-    border-bottom-left-radius:3px;
-  }
-  table tr:last-child td:last-child {
-    -moz-border-radius-bottomright:3px;
-    -webkit-border-bottom-right-radius:3px;
-    border-bottom-right-radius:3px;
-  }
   table tr:hover td {
     background: #f2f2f2;
     background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
@@ -102,36 +72,40 @@ table tr:hover td {
   }
 
 table th {
-    padding:21px 25px 22px 25px;
-    border-top:1px solid #fafafa;
-    border-bottom:1px solid #e0e0e0;
+    background: #fbb03f;
+}`;
 
-    background: #ededed;
-    background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
-    background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+const blue = `
+table tr:hover td {
+    background: #9fc9eb;
   }
-.type1{
-    background-color:#f36421;
-    color:white;
-}
-.type2{
-    background-color:#fbb03f;
-}
-.type3{
-    background-color:#fee3c6;
-}
 
-footer{
-    background-color:#fee3c6;
+table th {
+    background: #1b75bc;
+}`;
 
-}
-h2{
-    color:#f36421;
-    text-align:left;
+const turq = `
+table tr:hover td {
+    background: #b2b2b2;
+  }
 
+table th {
+    background: #66cccc;
+}`;
+
+const green = `
+table tr:hover td {
+    background: #becca8;
+  }
+
+table th {
+    background: #39b54a;
 }`;
 
 module.exports = {
   base,
   orange,
+  blue,
+  turq,
+  green,
 };
