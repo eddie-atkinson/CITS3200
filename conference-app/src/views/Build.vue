@@ -130,7 +130,6 @@ export default {
         'Blue',
         'Orange',
         'Turquoise',
-        'Purple',
         'Green',
       ],
       favouriteColour: '',
@@ -154,8 +153,8 @@ export default {
       this.loading = true;
       reader.onload = (event) => {
         try {
-          // this.jsonData = parseExcel(event.target.result);
-          this.htmlData = excelToHTML(event.target.result);
+          // this.htmlData = excelToHTML(event.target.result, this.favouriteColour);
+          this.excelData = event.target.result;
         } catch (err) {
           this.error = true;
           this.errorMsg = err;
@@ -171,6 +170,7 @@ export default {
     },
     buildProgramme() {
       this.step += 1;
+      this.htmlData = excelToHTML(this.excelData, this.favouriteColour);
       const blob = new Blob([this.htmlData], {
         type: 'text/plain',
       });
