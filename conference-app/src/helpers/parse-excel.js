@@ -85,6 +85,18 @@ const dummy = [
     Day: '1',
   },
   {
+    Name: 'Keynote Address 1',
+    Description: 'KEYNOTE: Why should we ‘Think Big’ on closure? L Tyler, J Heyes, BHP, Australia',
+    Type: 'Plenary',
+    Session: '1',
+    'Start Time': '9/3/2019 8:30',
+    'End Time': '9/3/2019 9:00',
+    'Location Name': 'Grand Ballroom 2 & 3',
+    Authors: 'Laura Tyler, BHP',
+    Speaker: 'Laura Tyler',
+    Day: 1,
+  },
+  {
     Name: 'Morning Tea',
     Description: 'Morning Tea',
     Type: 'Break',
@@ -94,7 +106,9 @@ const dummy = [
     Day: '3',
   },
 ];
+
 orderByDay(dummy);
+// console.dir(orderByDay(dummy));
 
 export default function excelToHTML(data, theme) {
   const wb = XLSX.read(data, {
