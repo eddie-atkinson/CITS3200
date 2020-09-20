@@ -6,7 +6,7 @@
           <v-card-title class='text-h4'>Conference Programme Creator</v-card-title>
           <v-card-text class='text-subtitle-1'>
             <p>
-              Welcome to the Australian Institute for
+              Welcome to the Australian Centre for
               Geomechanics' conference programme creation app.
             </p>
             <p>To get started building your own conference programme click below!</p>
