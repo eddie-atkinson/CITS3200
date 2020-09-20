@@ -60,6 +60,42 @@ function rowToHTML(headers, rowData, theme) {
   `);
 }
 
+function orderByDay(data) {
+  return data.reduce((total, item) => {
+    const property = item.Day;
+    const grouped = total;
+    if (!grouped[property]) {
+      grouped[property] = [];
+    }
+    grouped[property].push(item);
+    return grouped;
+  }, {});
+}
+const dummy = [
+  {
+    Name: 'Welcome and Introduction',
+    Description: 'Welcome and introduction, including Welcome to Country by Barry McGuire Speaker',
+    Type: 'Plenary',
+    Session: '1',
+    'Start Time': '9/3/2019 8:00',
+    'End Time': '9/3/2019 8:30',
+    'Location Name': 'Grand Ballroom 2 & 3',
+    Authors: 'a Carneiro, AB Fourie, The University of Western Australia, Australia',
+    Speaker: 'a Carneiro',
+    Day: '1',
+  },
+  {
+    Name: 'Morning Tea',
+    Description: 'Morning Tea',
+    Type: 'Break',
+    'Start Time': '9/5/2019 10:00',
+    'End Time': '9/5/2019 10:30',
+    'Location Name': 'Exhibition Area',
+    Day: '3',
+  },
+];
+orderByDay(dummy);
+
 export default function excelToHTML(data, theme) {
   const wb = XLSX.read(data, {
     type: 'binary',
