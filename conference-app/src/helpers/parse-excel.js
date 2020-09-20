@@ -1,21 +1,31 @@
 import XLSX from 'xlsx';
 import {
-  base,
-  orange,
-  blue,
-  turq,
-  green,
+  base, orange, blue, turq, green,
 } from './styles';
 
 function generateRows(rowData, headers) {
+  let headercount = 0;
   let returnString = '';
   rowData.forEach((item) => {
     returnString += '<tr>';
     headers.forEach((header) => {
       if (item[header]) {
-        returnString += `<td>${item[header]}</td>`;
-      } else {
+        if (headercount < 8) {
+          returnString += `<td>${item[header]}</td>`;
+          headercount += 1;
+          //  if it's in the speaker row (row 9)
+        } else if (headercount === 8) {
+          returnString += `<td><u>${item[header]}</u></td>`;
+          //  reset counter
+          headercount = 0;
+        }
+        //  accomodating for when it creates an empty box, the headercount must still increment
+      } else if (!item[header] && headercount < 8) {
         returnString += '<td></td>';
+        headercount += 1;
+      } else if (!item[header] && headercount === 8) {
+        returnString += '<td></td>';
+        headercount = 0;
       }
     });
   });
@@ -32,7 +42,7 @@ function fetchStyling(theme) {
 }
 
 function rowToHTML(headers, rowData, theme) {
-  return (`<html>
+  return `<html>
       <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +67,7 @@ function rowToHTML(headers, rowData, theme) {
         </table>
       </body>
       </html>
-  `);
+  `;
 }
 
 export default function excelToHTML(data, theme) {
