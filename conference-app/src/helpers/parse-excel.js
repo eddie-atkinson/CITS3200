@@ -1,10 +1,6 @@
 import XLSX from 'xlsx';
 import {
-  base,
-  orange,
-  blue,
-  turq,
-  green,
+  base, orange, blue, turq, green,
 } from './styles';
 
 // function splitDays(rowData) {
@@ -32,14 +28,28 @@ import {
 //   return sessions;
 // }
 function generateRows(rowData, headers) {
+  let headercount = 0;
   let returnString = '';
   rowData.forEach((item) => {
     returnString += '<tr>';
     headers.forEach((header) => {
       if (item[header]) {
-        returnString += `<td>${item[header]}</td>`;
-      } else {
+        if (headercount < 8) {
+          returnString += `<td>${item[header]}</td>`;
+          headercount += 1;
+          //  if it's in the speaker row (row 9)
+        } else if (headercount === 8) {
+          returnString += `<td><u>${item[header]}</u></td>`;
+          //  reset counter
+          headercount = 0;
+        }
+        //  accomodating for when it creates an empty box, the headercount must still increment
+      } else if (!item[header] && headercount < 8) {
         returnString += '<td></td>';
+        headercount += 1;
+      } else if (!item[header] && headercount === 8) {
+        returnString += '<td></td>';
+        headercount = 0;
       }
     });
   });
@@ -56,7 +66,7 @@ function fetchStyling(theme) {
 }
 
 function rowToHTML(headers, rowData, theme) {
-  return (`<html>
+  return `<html>
       <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,8 +91,58 @@ function rowToHTML(headers, rowData, theme) {
         </table>
       </body>
       </html>
-  `);
+  `;
 }
+
+function orderByDay(data) {
+  return data.reduce((total, item) => {
+    const property = item.Day;
+    const grouped = total;
+    if (!grouped[property]) {
+      grouped[property] = [];
+    }
+    grouped[property].push(item);
+    return grouped;
+  }, {});
+}
+const dummy = [
+  {
+    Name: 'Welcome and Introduction',
+    Description: 'Welcome and introduction, including Welcome to Country by Barry McGuire Speaker',
+    Type: 'Plenary',
+    Session: '1',
+    'Start Time': '9/3/2019 8:00',
+    'End Time': '9/3/2019 8:30',
+    'Location Name': 'Grand Ballroom 2 & 3',
+    Authors: 'a Carneiro, AB Fourie, The University of Western Australia, Australia',
+    Speaker: 'a Carneiro',
+    Day: '1',
+  },
+  {
+    Name: 'Keynote Address 1',
+    Description: 'KEYNOTE: Why should we ‘Think Big’ on closure? L Tyler, J Heyes, BHP, Australia',
+    Type: 'Plenary',
+    Session: '1',
+    'Start Time': '9/3/2019 8:30',
+    'End Time': '9/3/2019 9:00',
+    'Location Name': 'Grand Ballroom 2 & 3',
+    Authors: 'Laura Tyler, BHP',
+    Speaker: 'Laura Tyler',
+    Day: 1,
+  },
+  {
+    Name: 'Morning Tea',
+    Description: 'Morning Tea',
+    Type: 'Break',
+    'Start Time': '9/5/2019 10:00',
+    'End Time': '9/5/2019 10:30',
+    'Location Name': 'Exhibition Area',
+    Day: '3',
+  },
+];
+
+orderByDay(dummy);
+// console.dir(orderByDay(dummy));
 
 export default function excelToHTML(data, theme) {
   const wb = XLSX.read(data, {
