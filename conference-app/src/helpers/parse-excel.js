@@ -7,6 +7,30 @@ import {
   green,
 } from './styles';
 
+// function splitDays(rowData) {
+//   const days = {};
+//   const reducer = (acc, row) => {
+//     if (!acc[row.Day]) {
+//       acc[row.Day] = [];
+//     }
+//     acc[row.Day].push(row);
+//     return acc;
+//   };
+//   rowData.reduce(reducer, days);
+//   return days;
+// }
+// function splitSessions(sessionBlock) {
+//   const sessions = {};
+//   const reducer = (acc, conf) => {
+//     if (!acc[conf.Session]) {
+//       acc[conf.Session] = [];
+//     }
+//     acc[conf.Session].push(conf);
+//     return acc;
+//   };
+//   sessionBlock.reduce(reducer, sessions);
+//   return sessions;
+// }
 function generateRows(rowData, headers) {
   let returnString = '';
   rowData.forEach((item) => {
