@@ -3,8 +3,31 @@ import {
   base, orange, blue, turq, green,
 } from './styles';
 
+function orderByDay(rowData) {
+  const reducer = (acc, row) => {
+    if (!acc[row.Day]) {
+      acc[row.Day] = [];
+    }
+    acc[row.Day].push(row);
+    return acc;
+  };
+  return rowData.reduce(reducer, {});
+}
+
+function splitSessions(sessionBlock) {
+  const reducer = (acc, conf) => {
+    if (!acc[conf.Session]) {
+      acc[conf.Session] = [];
+    }
+    acc[conf.Session].push(conf);
+    return acc;
+  };
+  return sessionBlock.reduce(reducer, {});
+}
+
 function generateRows(rowData, headers) {
   let headercount = 0;
+  console.log(splitSessions(orderByDay(rowData)['1']));
   let returnString = '';
   rowData.forEach((item) => {
     returnString += '<tr>';
@@ -76,56 +99,6 @@ function rowToHTML(headers, rowData, theme) {
       </html>
   `;
 }
-
-function orderByDay(data) {
-  return data.reduce((total, item) => {
-    const property = item.Day;
-    const grouped = total;
-    if (!grouped[property]) {
-      grouped[property] = [];
-    }
-    grouped[property].push(item);
-    return grouped;
-  }, {});
-}
-const dummy = [
-  {
-    Name: 'Welcome and Introduction',
-    Description: 'Welcome and introduction, including Welcome to Country by Barry McGuire Speaker',
-    Type: 'Plenary',
-    Session: '1',
-    'Start Time': '9/3/2019 8:00',
-    'End Time': '9/3/2019 8:30',
-    'Location Name': 'Grand Ballroom 2 & 3',
-    Authors: 'a Carneiro, AB Fourie, The University of Western Australia, Australia',
-    Speaker: 'a Carneiro',
-    Day: '1',
-  },
-  {
-    Name: 'Keynote Address 1',
-    Description: 'KEYNOTE: Why should we ‘Think Big’ on closure? L Tyler, J Heyes, BHP, Australia',
-    Type: 'Plenary',
-    Session: '1',
-    'Start Time': '9/3/2019 8:30',
-    'End Time': '9/3/2019 9:00',
-    'Location Name': 'Grand Ballroom 2 & 3',
-    Authors: 'Laura Tyler, BHP',
-    Speaker: 'Laura Tyler',
-    Day: 1,
-  },
-  {
-    Name: 'Morning Tea',
-    Description: 'Morning Tea',
-    Type: 'Break',
-    'Start Time': '9/5/2019 10:00',
-    'End Time': '9/5/2019 10:30',
-    'Location Name': 'Exhibition Area',
-    Day: '3',
-  },
-];
-
-orderByDay(dummy);
-// console.dir(orderByDay(dummy));
 
 export default function excelToHTML(data, theme) {
   const wb = XLSX.read(data, {
