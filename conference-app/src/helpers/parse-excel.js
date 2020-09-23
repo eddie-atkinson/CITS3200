@@ -1,14 +1,22 @@
 import XLSX from 'xlsx';
+import numWords from 'num-words';
+
 import {
   base, orange, blue, turq, green,
 } from './styles';
 
 function orderByDay(rowData) {
   const reducer = (acc, row) => {
+    const intDay = parseInt(row.Day, 10);
+    if (Number.isNaN(intDay)) {
+      throw new Error(
+        'Sheet format invalid, one of the day descriptors could not be parsed as an integer',
+      );
+    }
     if (!acc[row.Day]) {
       acc[row.Day] = [];
     }
-    acc[row.Day].push(row);
+    acc[intDay].push(row);
     return acc;
   };
   return rowData.reduce(reducer, {});
@@ -27,7 +35,6 @@ function splitSessions(sessionBlock) {
 
 function generateRows(rowData, headers) {
   let headercount = 0;
-  console.log(splitSessions(orderByDay(rowData)['1']));
   let returnString = '';
   rowData.forEach((item) => {
     returnString += '<tr>';
@@ -63,8 +70,20 @@ function fetchStyling(theme) {
   else if (theme === 'Green') returnTheme = green;
   return returnTheme;
 }
-
+function generateTables(days) {
+  let tables = '';
+  const dayKeys = Object.keys(days).sort();
+  dayKeys.forEach((key) => {
+    const dayData = days[key];
+    tables += `<h2 class='title'> Day  ${numWords(key)} Programme`;
+    console.log(dayData);
+  });
+  generateRows([days], ['hello world']);
+  return tables;
+}
 function rowToHTML(headers, rowData, theme) {
+  const days = orderByDay(rowData);
+  splitSessions(orderByDay(rowData)['1']);
   return `<html>
       <head>
       <meta charset="utf-8">
@@ -77,17 +96,7 @@ function rowToHTML(headers, rowData, theme) {
       <title></title>
       </head>
       <body>
-        <table>
-        <thead>
-          <tr>
-            <th>${headers.join('</th><th>')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${generateRows(rowData, headers)}
-
-        </tbody>
-        </table>
+        ${generateTables(days)}
       </body>
       </html>
   `;
