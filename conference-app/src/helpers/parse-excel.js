@@ -49,48 +49,13 @@ function dateFromExcel(excelDate) {
   // Credit: Christopher Scott
   // https://gist.github.com/christopherscott/2782634
   let newDate = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
-  const secondsInMinute = 60000;
+  const milliSecondsInMinute = 60000;
   // Round the time up to the nearest minute to take account of small conversion errors
-  newDate = new Date(Math.round(newDate.getTime() / secondsInMinute) * secondsInMinute);
+  newDate = new Date(Math.round(newDate.getTime() / milliSecondsInMinute) * milliSecondsInMinute);
   if (Number.isNaN(newDate)) {
     throw new Error(`Non-excel style date used ${excelDate}`);
   }
   return newDate;
-}
-
-function generateRows(rowData, headers) {
-  let headercount = 0;
-  let returnString = '';
-  rowData.forEach((item) => {
-    returnString += '<tr>';
-    headers.forEach((header) => {
-      if (item[header]) {
-        if (headercount < 8) {
-          returnString += `<td>${item[header]}</td>`;
-          headercount += 1;
-          //  if it's in the speaker row (row 9)
-        } else if (headercount === 8) {
-          returnString += `<td><u>${item[header]}</u></td>`;
-          headercount += 1;
-        } else if (headercount > 8) {
-          returnString += `<td>${item[header]}</td>`;
-          //  reset counter
-          headercount = 0;
-        }
-        //  accomodating for when it creates an empty box, the headercount must still increment
-      } else if (!item[header] && headercount < 8) {
-        returnString += '<td></td>';
-        headercount += 1;
-      } else if (!item[header] && headercount === 8) {
-        returnString += '<td></td>';
-        headercount += 1;
-      } else if (!item[header] && headercount > 8) {
-        returnString += '<td></td>';
-        headercount = 0;
-      }
-    });
-  });
-  return returnString;
 }
 
 function fetchStyling(theme) {
@@ -100,6 +65,20 @@ function fetchStyling(theme) {
   else if (theme === 'Turquoise') returnTheme = turq;
   else if (theme === 'Green') returnTheme = green;
   return returnTheme;
+}
+
+function generateAuthors(authors, speaker) {
+  if (!authors || !speaker) return '';
+  let returnString = authors;
+  const startIndex = returnString.indexOf(speaker);
+  if (startIndex === -1) {
+    returnString += `, <span class='speaker'>${speaker}</span>`;
+  } else {
+    returnString = `${authors.slice(0, startIndex)}`;
+    returnString += `<span class='speaker'>${speaker}</span>`;
+    returnString += `${authors.slice(startIndex + speaker.length)}`;
+  }
+  return returnString;
 }
 function generateTables(days) {
   let tables = '';
@@ -121,14 +100,15 @@ function generateTables(days) {
         // We want the time in its original format so we specify UTC
         tables += `<tr>
                     <td> ${dayjs(confTime).utc().format('D/M h:mm A')}</td>
-                    <td>${conf.Title}</td>
-                    <td> ${conf.Session} </td>
+                    <td>${conf.Title} <span class='authors'> ${generateAuthors(
+  conf.Authors,
+  conf.Speaker,
+)} </span></td>
                   </tr>`;
       });
     });
     tables += '</table>';
   });
-  generateRows([days], ['hello world']);
   return tables;
 }
 
