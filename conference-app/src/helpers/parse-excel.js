@@ -109,15 +109,15 @@ function generateTables(days) {
     tables += '<table>';
     sessionKeys.forEach((sessionKey) => {
       const session = sessions[sessionKey];
-      const conferenceKeys = Object.keys(session).sort(
-        (a, b) => dateFromExcel(a['Start Time']) - dateFromExcel(b['Start Time']),
-      );
+      const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
+      const conferenceKeys = Object.keys(session).sort(sorter);
       conferenceKeys.forEach((confKey) => {
         const conf = session[confKey];
         const confTime = dateFromExcel(conf['Start Time']);
         tables += `<tr>
                     <td> ${dayjs(confTime).utc().format('D/M h:mm A')}</td>
                     <td>${conf.Title}</td>
+                    <td> ${conf.Session} </td>
                   </tr>`;
       });
     });
