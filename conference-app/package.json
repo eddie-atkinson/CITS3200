@@ -16,6 +16,8 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "dayjs": "^1.8.36",
+    "num-words": "^1.2.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.11",
