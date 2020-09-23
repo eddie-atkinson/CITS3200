@@ -46,6 +46,9 @@ function generateRows(rowData, headers) {
           //  if it's in the speaker row (row 9)
         } else if (headercount === 8) {
           returnString += `<td><u>${item[header]}</u></td>`;
+          headercount += 1;
+        } else if (headercount > 8) {
+          returnString += `<td>${item[header]}</td>`;
           //  reset counter
           headercount = 0;
         }
@@ -54,6 +57,9 @@ function generateRows(rowData, headers) {
         returnString += '<td></td>';
         headercount += 1;
       } else if (!item[header] && headercount === 8) {
+        returnString += '<td></td>';
+        headercount += 1;
+      } else if (!item[header] && headercount > 8) {
         returnString += '<td></td>';
         headercount = 0;
       }
@@ -81,6 +87,7 @@ function generateTables(days) {
   generateRows([days], ['hello world']);
   return tables;
 }
+
 function rowToHTML(headers, rowData, theme) {
   const days = orderByDay(rowData);
   splitSessions(orderByDay(rowData)['1']);
