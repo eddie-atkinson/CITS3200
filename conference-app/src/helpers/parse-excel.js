@@ -48,7 +48,10 @@ function splitSessions(sessionBlock) {
 function dateFromExcel(excelDate) {
   // Credit: Christopher Scott
   // https://gist.github.com/christopherscott/2782634
-  const newDate = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+  let newDate = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+  const secondsInMinute = 60000;
+  // Round the time up to the nearest minute to take account of small conversion errors
+  newDate = new Date(Math.round(newDate.getTime() / secondsInMinute) * secondsInMinute);
   if (Number.isNaN(newDate)) {
     throw new Error(`Non-excel style date used ${excelDate}`);
   }
@@ -114,6 +117,8 @@ function generateTables(days) {
       conferenceKeys.forEach((confKey) => {
         const conf = session[confKey];
         const confTime = dateFromExcel(conf['Start Time']);
+        // Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
+        // We want the time in its original format so we specify UTC
         tables += `<tr>
                     <td> ${dayjs(confTime).utc().format('D/M h:mm A')}</td>
                     <td>${conf.Title}</td>
