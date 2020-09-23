@@ -87,8 +87,8 @@ function generateTables(days) {
     const dayData = days[dayKey];
     const sessions = splitSessions(dayData);
     const sessionKeys = Object.keys(sessions).sort();
-    tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme`;
-    tables += '<table>';
+    tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme</h2>`;
+    tables += '<table class="responsive-table">';
     sessionKeys.forEach((sessionKey) => {
       const session = sessions[sessionKey];
       const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
@@ -98,8 +98,8 @@ function generateTables(days) {
         const confTime = dateFromExcel(conf['Start Time']);
         // Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
         // We want the time in its original format so we specify UTC
-        tables += `<tr>
-                    <td> ${dayjs(confTime).utc().format('D/M h:mm A')}</td>
+        tables += `<tr class='${conf.Type.toLowerCase()}'>
+                    <td> ${dayjs(confTime).utc().format('h:mm')}</td>
                     <td>${conf.Title} <span class='authors'> ${generateAuthors(
   conf.Authors,
   conf.Speaker,
@@ -118,6 +118,7 @@ function rowToHTML(headers, rowData, theme) {
       <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
       </head>
       <style>
         ${base}
@@ -126,7 +127,9 @@ function rowToHTML(headers, rowData, theme) {
       <title></title>
       </head>
       <body>
-        ${generateTables(days)}
+        <div class='center'>
+          ${generateTables(days)}
+        </div>
       </body>
       </html>
   `;
