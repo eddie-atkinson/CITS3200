@@ -6,6 +6,9 @@ const base = `table a:link {
   .title {
     text-transform: capitalize;
   }
+  .speaker {
+    text-decoration: underline;
+  }
   table a:visited {
     color: #999999;
     font-weight:bold;
