@@ -29,6 +29,13 @@
                   simply select the excel programme you wish to convert and select your
                   favourite colour for the theme.
                 </p>
+                <v-text-field
+                label='Conference Name'
+                prepend-icon='mdi-pencil'
+                :rules='[validation.required]'
+                v-model='formData.confName'
+                >
+                </v-text-field>
                 <v-file-input
                 label='Select your Excel file for conversion'
                 accept='.xlsx'
@@ -39,10 +46,11 @@
                 </v-file-input>
                 <v-select
                 :items='colours'
-                v-model='favouriteColour'
+                v-model='formData.themeColour'
                 id='colour-input-field'
                 :rules='[validation.required]'
-                label='Select your favourite colour'
+                prepend-icon='mdi-palette'
+                label='Select the programme theme'
                 >
                 </v-select>
               </v-card-text>
@@ -75,7 +83,7 @@
                 Download your files
               </v-card-title>
               <v-card-text>
-                <a :href='htmlBlob' :download="`${fileName}.html`">
+                <a :href='htmlBlob' :download="`${formData.fileName}.html`">
                   <v-chip
                   class='grey--lighten-3 pa-4'
                   >
@@ -85,7 +93,7 @@
                     >
                       mdi-download
                     </v-icon>
-                      {{ fileName }}
+                      {{ formData.fileName }}
                   </v-chip>
                 </a>
               </v-card-text>
@@ -124,7 +132,6 @@ export default {
       htmlBlob: null,
       error: false,
       errorMsg: '',
-      fileName: '',
       loading: false,
       colours: [
         'Blue',
@@ -132,7 +139,12 @@ export default {
         'Turquoise',
         'Green',
       ],
-      favouriteColour: '',
+      formData: {
+        themeColour: '',
+        confName: '',
+        fileName: '',
+        excelData: null,
+      },
       validation: {
         required: (value) => !!value || 'This field is required',
         fileName: (value) => value === undefined || value.name.endsWith('.xlsx') || 'Files must be .xlsx',
@@ -146,15 +158,14 @@ export default {
       // Check if they've deleted a selection and return immediately
       if (!file) return;
       // Strip the file extension from the file name
-      this.fileName = file.name.replace(new RegExp('\\..*', 'i'), '');
+      this.formData.fileName = file.name.replace(new RegExp('\\..*', 'i'), '');
       // Reset the error state on new file upload
       this.error = false;
       const reader = new FileReader();
       this.loading = true;
       reader.onload = (event) => {
         try {
-          // this.htmlData = excelToHTML(event.target.result, this.favouriteColour);
-          this.excelData = event.target.result;
+          this.formData.excelData = event.target.result;
         } catch (err) {
           this.error = true;
           this.errorMsg = err;
@@ -170,7 +181,7 @@ export default {
     },
     buildProgramme() {
       this.step += 1;
-      this.htmlData = excelToHTML(this.excelData, this.favouriteColour);
+      this.htmlData = excelToHTML(this.formData);
       const blob = new Blob([this.htmlData], {
         type: 'text/plain',
       });
@@ -180,7 +191,7 @@ export default {
       window.URL.revokeObjectURL(this.htmlBlob);
     },
     getFileNames(ext) {
-      return `${this.fileName}.${ext}`;
+      return `${this.formData.fileName}.${ext}`;
     },
     goBack() {
       this.step -= 1;
