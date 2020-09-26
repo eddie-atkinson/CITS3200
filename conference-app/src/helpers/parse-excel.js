@@ -100,7 +100,7 @@ function generateTables(days) {
         // We want the time in its original format so we specify UTC
         tables += `<tr class='${conf.Type.toLowerCase()}'>
                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-                    <td>${conf.Title} <span class='authors'> ${generateAuthors(
+                    <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
   conf.Authors,
   conf.Speaker,
 )} </span></td>
@@ -112,7 +112,7 @@ function generateTables(days) {
   return tables;
 }
 
-function rowToHTML(headers, rowData, theme) {
+function rowToHTML(rowData, theme, title) {
   const days = orderByDay(rowData);
   return `<html>
       <head>
@@ -128,6 +128,9 @@ function rowToHTML(headers, rowData, theme) {
       </head>
       <body>
         <div class='center'>
+          <h1>
+            ${title}
+          </h1>
           ${generateTables(days)}
         </div>
       </body>
@@ -135,7 +138,10 @@ function rowToHTML(headers, rowData, theme) {
   `;
 }
 
-export default function excelToHTML(data, theme) {
+export default function excelToHTML(formData) {
+  const data = formData.excelData;
+  const theme = formData.themeColour;
+  const title = formData.confName;
   const wb = XLSX.read(data, {
     type: 'binary',
   });
@@ -145,6 +151,5 @@ export default function excelToHTML(data, theme) {
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
   }
-  const headers = Object.keys(rowData[0]);
-  return rowToHTML(headers, rowData, theme);
+  return rowToHTML(rowData, theme, title);
 }
