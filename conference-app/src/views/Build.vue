@@ -115,6 +115,7 @@
                 <v-btn
                 to='/'
                 @click='releaseURL'
+                data-cy='finish-btn'
                 >
                   Finish
                 </v-btn>

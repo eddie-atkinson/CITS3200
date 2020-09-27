@@ -2,7 +2,7 @@
 
 import 'cypress-file-upload';
 
-describe('My First Test', () => {
+describe('Build.vue', () => {
   beforeEach(() => {
     cy.viewport(1024, 768);
     cy.visit('/');
@@ -18,7 +18,7 @@ describe('My First Test', () => {
     cy.contains('.v-card__title', 'Add files and select themes');
   });
 
-  it('correctly inputs form data', () => {
+  it('correctly uploads file and downloads', () => {
     const testData = [
       {
         confName: 'Conference 1',
@@ -55,8 +55,16 @@ describe('My First Test', () => {
       });
       cy.get('[data-cy=select-colour-input]').type(data.colour, { force: true });
       cy.get('[data-cy=build-programme-btn]').click({ force: true });
-      cy.get('[data-cy=download-html-button]').contains(data.fileName);
+      cy.get('[data-cy=download-html-button]').should('be.visible').contains(data.fileName);
+      cy.get('[data-cy=download-html-button]').click();
+      cy.wait(2000);
+      cy.task('readFileMaybe', data.fileName + data.fileExt).then((file) => {
+        expect(file).eql(true);
+      });
       cy.get('[data-cy=goBack-btn]').click();
     });
+
+    cy.get('[data-cy=finish-btn]').click();
+    cy.contains('.v-card__title', 'Conference Programme Creator');
   });
 });
