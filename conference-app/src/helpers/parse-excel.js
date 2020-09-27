@@ -80,7 +80,7 @@ function generateAuthors(authors, speaker) {
   }
   return returnString;
 }
-function generateTables(days) {
+function generateTables(days, links) {
   let tables = '';
   const dayKeys = Object.keys(days).sort();
   dayKeys.forEach((dayKey) => {
@@ -95,16 +95,34 @@ function generateTables(days) {
       const conferenceKeys = Object.keys(session).sort(sorter);
       conferenceKeys.forEach((confKey) => {
         const conf = session[confKey];
+
+        Object.values(links).forEach((link) => {
+          if (conf.Title === link.confTitle) {
+            conf.Link = link.confLink;
+          }
+        });
         const confTime = dateFromExcel(conf['Start Time']);
         // Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
         // We want the time in its original format so we specify UTC
-        tables += `<tr class='${conf.Type.toLowerCase()}'>
+        if (conf.Link !== undefined) {
+          tables += `<tr class='${conf.Type.toLowerCase()}'>
+                    <td> ${dayjs(confTime).utc().format('h:mm')}</td>
+                    <td><a href="${conf.Link}">${
+  conf.Title
+}</a> <br /> <span class='authors'> ${generateAuthors(
+  conf.Authors,
+  conf.Speaker,
+)} </span></td>
+                  </tr>`;
+        } else {
+          tables += `<tr class='${conf.Type.toLowerCase()}'>
                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
                     <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
   conf.Authors,
   conf.Speaker,
 )} </span></td>
                   </tr>`;
+        }
       });
     });
     tables += '</table>';
@@ -112,7 +130,7 @@ function generateTables(days) {
   return tables;
 }
 
-function rowToHTML(rowData, theme, title) {
+function rowToHTML(rowData, theme, title, links) {
   const days = orderByDay(rowData);
   return `<html>
       <head>
@@ -131,7 +149,7 @@ function rowToHTML(rowData, theme, title) {
           <h1>
             ${title}
           </h1>
-          ${generateTables(days)}
+          ${generateTables(days, links)}
         </div>
       </body>
       </html>
@@ -147,9 +165,21 @@ export default function excelToHTML(formData) {
   });
   const sheetName = wb.SheetNames[0];
   const ws = wb.Sheets[sheetName];
+
+  const obj = ws;
+  const links = [];
+
+  Object.values(obj).forEach((val) => {
+    if (val.l !== undefined && val.h !== undefined) {
+      const ctitle = val.h;
+      const clink = val.l.Rel.Target;
+      links.push({ confTitle: ctitle, confLink: clink });
+    }
+  });
+
   const rowData = XLSX.utils.sheet_to_json(ws);
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
   }
-  return rowToHTML(rowData, theme, title);
+  return rowToHTML(rowData, theme, title, links);
 }
