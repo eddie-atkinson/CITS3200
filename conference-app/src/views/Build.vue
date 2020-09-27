@@ -35,6 +35,7 @@
                 id='conference-name-field'
                 :rules='[validation.required]'
                 v-model='formData.confName'
+                data-cy='conference-name-field'
                 >
                 </v-text-field>
                 <v-file-input
@@ -43,6 +44,7 @@
                 id='input-file-field'
                 :rules='[validation.required, validation.fileName]'
                 @change='loadFile'
+                data-cy='input-file-field'
                 >
                 </v-file-input>
                 <v-select
@@ -105,6 +107,7 @@
               <v-card-actions>
                 <v-btn
                 @click='goBack'
+                data-cy='goBack-btn'
                 >
                   Go back
                 </v-btn>
