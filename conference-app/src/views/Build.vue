@@ -32,6 +32,7 @@
                 <v-text-field
                 label='Conference Name'
                 prepend-icon='mdi-pencil'
+                id='conference-name-field'
                 :rules='[validation.required]'
                 v-model='formData.confName'
                 >
@@ -51,6 +52,7 @@
                 :rules='[validation.required]'
                 prepend-icon='mdi-palette'
                 label='Select the programme theme'
+                data-cy='select-colour-input'
                 >
                 </v-select>
               </v-card-text>
@@ -61,6 +63,7 @@
                 :disabled='!valid || loading || error'
                 :loading='loading'
                 id='build-programme-btn'
+                data-cy='build-programme-btn'
                 @click='buildProgramme'
                 >
                   Build programme
@@ -85,7 +88,8 @@
               <v-card-text>
                 <a :href='htmlBlob' :download="`${formData.fileName}.html`">
                   <v-chip
-                  class='grey--lighten-3 pa-4'
+                  class='grey--lighten-3 pa-4 upfileName'
+                  data-cy='download-html-button'
                   >
                     <v-icon
                     left
