@@ -1,11 +1,12 @@
 const base = `
 .center {
   margin: auto;
-  width: 50%;
+  width: 90%;
   padding: 10px;
 }
 .authors {
   color: #58595b;
+  font-style: italic;
 }
 .title {
   text-transform: capitalize;
@@ -14,6 +15,14 @@ const base = `
 }
 .speaker {
   text-decoration: underline;
+}
+body {
+  font-family: "Century Gothic";
+
+}
+h2 {
+  text-transform: uppercase;
+  font-size: 200%;
 }
 `;
 
