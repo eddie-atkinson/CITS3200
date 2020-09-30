@@ -57,6 +57,21 @@
                 data-cy='select-colour-input'
                 >
                 </v-select>
+                <p> Toggle Custom CSS Input </p>
+                <v-btn
+                id='custom-css-btn'
+                data-cy='custom-css-btn'
+                @click='toggle(customcss)'>
+                ON
+                </v-btn>
+                <v-file-input
+                label='Select your custom CSS file'
+                accept='.css'
+                id='customcss'
+                @change='loadFile'
+                data-cy='customcss'
+                >
+                </v-file-input>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -73,6 +88,7 @@
               </v-card-actions>
               <span v-show='error' class='error--text'> {{ errorMsg }}</span>
             </v-card>
+
           </v-form>
         </v-window-item>
 
