@@ -58,18 +58,22 @@
                 >
                 </v-select>
                 <p> Toggle Custom CSS Input </p>
+                <v-btn-toggle
+                mandatory
+                v-model="toggle_exclusive"
+                >
                 <v-btn
-                id='custom-css-btn'
-                data-cy='custom-css-btn'
-                @click='toggle(customcss)'>
-                ON
-                </v-btn>
+                v-on:click="CSSHide = false"
+                >ON</v-btn>
+                <v-btn
+                v-on:click="CSSHide = true"
+                >OFF</v-btn>
+                </v-btn-toggle>
                 <v-file-input
+                v-show="!CSSHide"
                 label='Select your custom CSS file'
                 accept='.css'
-                id='customcss'
                 @change='loadFile'
-                data-cy='customcss'
                 >
                 </v-file-input>
               </v-card-text>
@@ -157,6 +161,7 @@ export default {
       error: false,
       errorMsg: '',
       loading: false,
+      CSSHide: false,
       colours: [
         'Blue',
         'Orange',
