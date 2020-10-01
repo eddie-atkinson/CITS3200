@@ -1,5 +1,8 @@
 <template>
   <div class="build">
+    <vue-headful
+      title ="Build your Conference Programme"
+      />
     <v-container>
       <v-row
       align='center'
@@ -104,6 +107,9 @@
         <v-window-item
         :value='2'
         >
+        <vue-headful
+          title ="Download Your Programme"
+        />
           <v-card
             class='pa-3 mx-auto'
             min-width='500'

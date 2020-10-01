@@ -1,5 +1,8 @@
 <template>
   <div>
+    <vue-headful
+      title ="Conference Converter Application - Home"
+      />
     <v-container>
       <v-row align='center' justify='center' class='mt-4'>
         <v-card class='pa-3'>
