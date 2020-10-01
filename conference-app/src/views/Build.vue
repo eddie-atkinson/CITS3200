@@ -66,11 +66,11 @@
                 v-model="toggle_exclusive"
                 >
                 <v-btn
-                v-on:click="CSSHide = false"
-                >ON</v-btn>
-                <v-btn
                 v-on:click="CSSHide = true"
                 >OFF</v-btn>
+                <v-btn
+                v-on:click="CSSHide = false"
+                >ON</v-btn>
                 </v-btn-toggle>
                 <v-file-input
                 v-show="!CSSHide"
@@ -172,7 +172,7 @@ export default {
       error: false,
       errorMsg: '',
       loading: false,
-      CSSHide: false,
+      CSSHide: true,
       cssfile: null,
       cssdata: '',
       colours: [
