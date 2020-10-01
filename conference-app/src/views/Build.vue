@@ -73,9 +73,14 @@
                 v-show="!CSSHide"
                 label='Select your custom CSS file'
                 accept='.css'
-                @change='loadFile'
+                @change='importCSS'
+                v-model="cssfile"
                 >
                 </v-file-input>
+                <v-card width="600" height="300" raised>
+                <v-card-title>File contents:</v-card-title>
+                <v-card-text><p>{{ cssdata }}</p></v-card-text>
+                </v-card>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -162,6 +167,8 @@ export default {
       errorMsg: '',
       loading: false,
       CSSHide: false,
+      cssfile: null,
+      cssdata: '',
       colours: [
         'Blue',
         'Orange',
@@ -225,6 +232,13 @@ export default {
     goBack() {
       this.step -= 1;
       this.releaseURL();
+    },
+    importCSS() {
+      const cssreader = new FileReader();
+      cssreader.readAsText(this.cssfile);
+      cssreader.onload = () => {
+        this.cssdata = cssreader.result;
+      };
     },
   },
 };
