@@ -18,7 +18,6 @@ const base = `
 }
 body {
   font-family: "Century Gothic";
-
 }
 h2 {
   text-transform: uppercase;
