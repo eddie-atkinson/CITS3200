@@ -45,7 +45,7 @@
                 label='Select your Excel file for conversion'
                 accept='.xlsx'
                 id='input-file-field'
-                :rules='[validation.required, validation.fileName]'
+                :rules='[validation.required, validation.excelFileName]'
                 @change='loadFile'
                 data-cy='input-file-field'
                 >
@@ -67,7 +67,7 @@
                 </v-checkbox>
                 <v-file-input
                 v-if='formData.customCSS'
-                :rules='[validation.required]'
+                :rules='[validation.required, validation.cssFileName]'
                 label='Select your custom CSS file'
                 accept='.css'
                 @change='loadCSS'
@@ -179,7 +179,8 @@ export default {
       },
       validation: {
         required: (value) => !!value || 'This field is required',
-        fileName: (value) => value === undefined || value.name.endsWith('.xlsx') || 'Files must be .xlsx',
+        excelFileName: (value) => value === undefined || value.name.endsWith('.xlsx') || 'Files must be .xlsx',
+        cssFileName: (value) => value === undefined || value.name.endsWith('.css') || 'Files must be .css',
       },
     };
   },
