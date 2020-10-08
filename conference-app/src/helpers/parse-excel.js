@@ -88,7 +88,7 @@ function generateTables(days, links) {
     const sessions = splitSessions(dayData);
     const sessionKeys = Object.keys(sessions).sort();
     tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme</h2>`;
-    tables += '<table class="responsive-table">';
+    tables += '<table>';
     sessionKeys.forEach((sessionKey) => {
       const session = sessions[sessionKey];
       const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
@@ -176,7 +176,6 @@ export default function excelToHTML(formData) {
       links.push({ confTitle: ctitle, confLink: clink });
     }
   });
-
   const rowData = XLSX.utils.sheet_to_json(ws);
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
