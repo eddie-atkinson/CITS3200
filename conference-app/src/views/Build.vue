@@ -60,30 +60,20 @@
                 data-cy='select-colour-input'
                 >
                 </v-select>
-                <p> Toggle Custom CSS Input </p>
-                <v-btn-toggle
-                mandatory
-                v-model="toggle_exclusive"
+                <v-checkbox
+                v-model='customCSS'
+                label='Add your own custom CSS file'
                 >
-                <v-btn
-                v-on:click="CSSHide = true"
-                >OFF</v-btn>
-                <v-btn
-                v-on:click="CSSHide = false"
-                >ON</v-btn>
-                </v-btn-toggle>
+                </v-checkbox>
                 <v-file-input
-                v-show="!CSSHide"
+                v-if='customCSS'
+                :rules='[validation.required]'
                 label='Select your custom CSS file'
                 accept='.css'
                 @change='importCSS'
-                v-model="cssfile"
+                v-model="cssFile"
                 >
                 </v-file-input>
-                <v-card width="600" height="300" raised>
-                <v-card-title>File contents:</v-card-title>
-                <v-card-text><p>{{ cssdata }}</p></v-card-text>
-                </v-card>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -172,7 +162,7 @@ export default {
       error: false,
       errorMsg: '',
       loading: false,
-      CSSHide: true,
+      customCSS: false,
       cssfile: null,
       cssdata: '',
       colours: [
