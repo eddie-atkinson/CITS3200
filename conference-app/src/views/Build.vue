@@ -66,14 +66,16 @@
                 >
                 </v-checkbox>
                 <v-file-input
-                v-if='formData.customCSS'
-                :rules='[validation.required, validation.cssFileName]'
                 label='Select your custom CSS file'
                 accept='.css'
+                id='input-css-field'
+                v-if='formData.customCSS'
+                :rules='[validation.required, validation.cssFileName]'
                 @change='loadCSS'
-                v-model="formData.cssFile"
+                data-cy='input-css-field'
                 >
                 </v-file-input>
+                {{ formData.cssData }}
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -90,7 +92,6 @@
               </v-card-actions>
               <span v-show='error' class='error--text'> {{ errorMsg }}</span>
             </v-card>
-
           </v-form>
         </v-window-item>
 
@@ -174,7 +175,6 @@ export default {
         fileName: '',
         excelData: null,
         customCSS: false,
-        cssFile: null,
         cssData: '',
       },
       validation: {
@@ -213,12 +213,21 @@ export default {
       await reader.readAsBinaryString(file);
     },
     buildProgramme() {
-      this.step += 1;
-      this.htmlData = excelToHTML(this.formData);
+      this.loading = true;
+      try {
+        this.htmlData = excelToHTML(this.formData);
+      } catch (e) {
+        this.error = true;
+        this.errorMsg = e;
+        this.loading = false;
+        return;
+      }
       const blob = new Blob([this.htmlData], {
         type: 'text/plain',
       });
       this.htmlBlob = window.URL.createObjectURL(blob);
+      this.loading = false;
+      this.step += 1;
     },
     releaseURL() {
       window.URL.revokeObjectURL(this.htmlBlob);
@@ -230,12 +239,28 @@ export default {
       this.step -= 1;
       this.releaseURL();
     },
-    loadCSS() {
-      const cssReader = new FileReader();
-      cssReader.onload = () => {
-        this.formData.cssData = cssReader.result;
+    async loadCSS(file) {
+      // Check if they've deleted a selection and return immediately
+      if (!file) return;
+      // Reset the error state on new file upload
+      this.error = false;
+      const reader = new FileReader();
+      this.loading = true;
+      reader.onload = (event) => {
+        try {
+          this.formData.cssData = event.target.result;
+        } catch (err) {
+          this.error = true;
+          this.errorMsg = err;
+        }
+        this.loading = false;
       };
-      cssReader.readAsText(this.formData.cssFile);
+      reader.onerror = (err) => {
+        this.error = true;
+        this.loading = false;
+        this.errorMsg = err;
+      };
+      await reader.readAsText(file);
     },
   },
 };
