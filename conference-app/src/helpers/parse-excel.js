@@ -130,7 +130,7 @@ function generateTables(days, links) {
   return tables;
 }
 
-function rowToHTML(rowData, theme, title, links, customcss) {
+function rowToHTML(rowData, theme, title, links, customCSS) {
   const days = orderByDay(rowData);
   return `<html>
       <head>
@@ -141,7 +141,7 @@ function rowToHTML(rowData, theme, title, links, customcss) {
       <style>
         ${base}
         ${fetchStyling(theme)}
-        ${customcss}
+        ${customCSS}
       </style>
       <title></title>
       </head>
@@ -161,7 +161,12 @@ export default function excelToHTML(formData) {
   const data = formData.excelData;
   const theme = formData.themeColour;
   const title = formData.confName;
-  const customcss = formData.cssData;
+  let customCSS = formData.cssData;
+  if (formData.customCSS) {
+    customCSS = formData.cssData;
+  } else {
+    customCSS = '';
+  }
   const wb = XLSX.read(data, {
     type: 'binary',
   });
@@ -182,5 +187,5 @@ export default function excelToHTML(formData) {
   if (rowData.length < 1) {
     throw new Error('First sheet in Excel document contains no data');
   }
-  return rowToHTML(rowData, theme, title, links, customcss);
+  return rowToHTML(rowData, theme, title, links, customCSS);
 }
