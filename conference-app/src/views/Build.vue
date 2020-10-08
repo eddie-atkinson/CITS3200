@@ -61,17 +61,17 @@
                 >
                 </v-select>
                 <v-checkbox
-                v-model='customCSS'
+                v-model='formData.customCSS'
                 label='Add your own custom CSS file'
                 >
                 </v-checkbox>
                 <v-file-input
-                v-if='customCSS'
+                v-if='formData.customCSS'
                 :rules='[validation.required]'
                 label='Select your custom CSS file'
                 accept='.css'
-                @change='importCSS'
-                v-model="cssFile"
+                @change='loadCSS'
+                v-model="formData.cssFile"
                 >
                 </v-file-input>
               </v-card-text>
@@ -162,9 +162,6 @@ export default {
       error: false,
       errorMsg: '',
       loading: false,
-      customCSS: false,
-      cssfile: null,
-      cssdata: '',
       colours: [
         'Blue',
         'Orange',
@@ -176,6 +173,9 @@ export default {
         confName: '',
         fileName: '',
         excelData: null,
+        customCSS: false,
+        cssFile: null,
+        cssData: '',
       },
       validation: {
         required: (value) => !!value || 'This field is required',
@@ -229,12 +229,12 @@ export default {
       this.step -= 1;
       this.releaseURL();
     },
-    importCSS() {
-      const cssreader = new FileReader();
-      cssreader.readAsText(this.cssfile);
-      cssreader.onload = () => {
-        this.cssdata = cssreader.result;
+    loadCSS() {
+      const cssReader = new FileReader();
+      cssReader.onload = () => {
+        this.formData.cssData = cssReader.result;
       };
+      cssReader.readAsText(this.formData.cssFile);
     },
   },
 };
