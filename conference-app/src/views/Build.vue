@@ -75,7 +75,6 @@
                 data-cy='input-css-field'
                 >
                 </v-file-input>
-                {{ formData.cssData }}
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
