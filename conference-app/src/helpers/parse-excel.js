@@ -64,6 +64,7 @@ function fetchStyling(theme) {
   else if (theme === 'Orange') returnTheme = orange;
   else if (theme === 'Turquoise') returnTheme = turq;
   else if (theme === 'Green') returnTheme = green;
+  else if (theme === 'None') returnTheme = '';
   return returnTheme;
 }
 

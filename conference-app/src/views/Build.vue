@@ -167,6 +167,7 @@ export default {
         'Orange',
         'Turquoise',
         'Green',
+        'None',
       ],
       formData: {
         themeColour: '',
