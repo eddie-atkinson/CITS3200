@@ -22,7 +22,7 @@ describe('Build.vue', () => {
     const testData = [
       {
         confName: 'Conference 1',
-        fileName: 'test1',
+        fileName: 'smaller-2',
         fileExt: '.xlsx',
         colour: 'Blue',
       },
@@ -51,7 +51,7 @@ describe('Build.vue', () => {
       cy.get('[data-cy=input-file-field]').attachFile({
         filePath: filePath + data.fileName + data.fileExt,
         mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        encoding: 'utf-8',
+        encoding: 'base64',
       });
       cy.get('[data-cy=select-colour-input]').type(data.colour, { force: true });
       cy.get('[data-cy=build-programme-btn]').click({ force: true });
