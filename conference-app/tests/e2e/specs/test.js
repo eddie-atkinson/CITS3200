@@ -25,6 +25,7 @@ describe('Build.vue', () => {
         fileName: 'smaller-2',
         fileExt: '.xlsx',
         colour: 'Blue',
+        dlName: 'smaller-2.html',
       },
 
       {
@@ -58,7 +59,7 @@ describe('Build.vue', () => {
       cy.get('[data-cy=download-html-button]').should('be.visible').contains(data.fileName);
       cy.get('[data-cy=download-html-button]').click();
       cy.wait(2000);
-      cy.task('readFileMaybe', data.fileName + data.fileExt).then((file) => {
+      cy.task('readFileMaybe', `${data.fileName}.html`).then((file) => {
         expect(file).eql(true);
       });
       cy.get('[data-cy=goBack-btn]').click();
