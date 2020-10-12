@@ -27,20 +27,6 @@ describe('Build.vue', () => {
         colour: 'Blue',
         dlName: 'smaller-2.html',
       },
-
-      {
-        confName: 'Conference 2',
-        fileName: 'test2',
-        fileExt: '.xlsx',
-        colour: 'Orange',
-      },
-
-      {
-        confName: '@@123 Conference 232333333333333333333333',
-        fileName: 'test3',
-        fileExt: '.xlsx',
-        colour: 'Green',
-      },
     ];
 
     const filePath = '../data/';
@@ -67,5 +53,32 @@ describe('Build.vue', () => {
 
     cy.get('[data-cy=finish-btn]').click();
     cy.contains('.v-card__title', 'Conference Programme Creator');
+  });
+
+  it('throws errors on incorrectly formatted excel files', () => {
+    cy.get('.v-btn__content').contains('Get started').click();
+
+    const testData = [
+      {
+        confName: 'Conference 2',
+        fileName: 'test2',
+        fileExt: '.xlsx',
+        colour: 'Orange',
+      },
+    ];
+
+    const filePath = '../data/';
+
+    cy.wrap(testData).each((data) => {
+      cy.get('#conference-name-field').clear().type(data.confName);
+      cy.get('[data-cy=input-file-field]').attachFile({
+        filePath: filePath + data.fileName + data.fileExt,
+        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        encoding: 'base64',
+      });
+      cy.get('[data-cy=select-colour-input]').type(data.colour, { force: true });
+      cy.get('[data-cy=build-programme-btn]').click({ force: true });
+      cy.get('.error--text').contains('Error:');
+    });
   });
 });

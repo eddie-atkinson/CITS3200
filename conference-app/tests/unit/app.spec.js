@@ -24,7 +24,8 @@ describe('Mounted App', () => {
     vuetify = new Vuetify(); // Instantiate a new Vue instance
   });
 
-  test('is instantiated', () => { // App.vue correctly mounts
+  test('is instantiated', () => {
+    // App.vue correctly mounts
     const wrapper = shallowMount(App, {
       localVue,
       vuetify,
@@ -33,36 +34,6 @@ describe('Mounted App', () => {
 
     expect(wrapper.vm).toBeTruthy();
   });
-
-  // UNSURE HOW TO GET THIS TO WORK FOR NOW
-
-  /*
-  it('has correct title', () => {
-    const titleWrapper = wrapper.find('title');
-    expect(titleWrapper.text()).toEqual('Conference Converter - Home');
-  });
-  */
-
-  // currently this will not work due to start over button and intro card in diff views
-  // perhaps this is best suited as an e2e test
-  /*
-  it('starts over correctly when pressed from landing page', async () => {
-    const wrapper = mount(App, {
-      localVue,
-      vuetify,
-      router,
-    });
-
-    const restartButton = wrapper.find('.v-btn--router');
-    const vcardWrappers = wrapper.findAll('v-card-text');
-    expect(vcardWrappers.exists()).toBe(true);
-
-    await restartButton.trigger('click');
-
-    expect(vcardWrappers[0]).toContain('Welcome to the Australian');
-    expect(vcardWrappers[1]).toContain('To get started');
-  });
-  */
 
   it('switches between light/dark mode', async () => {
     const wrapper = mount(App, {
@@ -81,12 +52,6 @@ describe('Mounted App', () => {
     await darkModeButton.trigger('click');
     expect(bodyWrapper.classes()).toContain('theme--light');
   });
-
-  /*
-  it('correctly renders excel spreadsheet', () => {
-
-  });
-  */
 
   /*
     Snapshot testing, will initialise snapshot upon first run and all following

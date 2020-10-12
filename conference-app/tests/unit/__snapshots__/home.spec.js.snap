@@ -2,22 +2,19 @@
 
 exports[`Home View matches last snapshot 1`] = `
 <div>
+  <vue-headful title="Conference Converter Application - Home"></vue-headful>
   <v-container-stub tag="div">
     <v-row-stub tag="div" align="center" justify="center" class="mt-4">
       <v-card-stub loaderheight="4" tag="div" class="pa-3">
-        <v-card-title-stub class="text-h4">
-          Conference Programme Creator
-        </v-card-title-stub>
+        <v-card-title-stub class="text-h4">Conference Programme Creator</v-card-title-stub>
         <v-card-text-stub class="text-subtitle-1">
           <p>
-            Welcome to the Australian Institute for
+            Welcome to the Australian Centre for
             Geomechanics' conference programme creation app.
           </p>
-          <p> To get started building your own conference programme click below!</p>
+          <p>To get started building your own conference programme click below!</p>
           <v-card-actions-stub>
-            <v-btn-stub tag="button" activeclass="" to="/build" type="button" id="get-started-btn">
-              Get started
-            </v-btn-stub>
+            <v-btn-stub tag="button" activeclass="" to="/build" type="button" id="get-started-btn">Get started</v-btn-stub>
           </v-card-actions-stub>
         </v-card-text-stub>
       </v-card-stub>

@@ -31,7 +31,6 @@ module.exports = (on, config) => {
       if (fs.existsSync(dlFolder + filename)) {
         return true;
       }
-
       return false;
     },
   });
