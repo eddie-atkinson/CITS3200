@@ -67,6 +67,20 @@ function fetchStyling(theme) {
   else if (theme === 'None') returnTheme = '';
   return returnTheme;
 }
+function addLogo(logo) {
+  let returnlogo = '';
+  if (logo) {
+    returnlogo += `<td>This Session's Sponsor: <br> <img style="display:block;" width="100%" height="100%" src="${logo}" /></td>`;
+  }
+  return returnlogo;
+}
+function isLogo(logo) {
+  let returnvalue = '';
+  if (!logo) {
+    returnvalue += 'colspan = "2"';
+  }
+  return returnvalue;
+}
 
 function generateAuthors(authors, speaker) {
   if (!authors || !speaker) return '';
@@ -108,20 +122,22 @@ function generateTables(days, links) {
         if (conf.Link !== undefined) {
           tables += `<tr class='${conf.Type.toLowerCase()}'>
                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-                    <td><a href="${conf.Link}">${
+                    <td ${isLogo(conf.Logo)}><a href="${conf.Link}">${
   conf.Title
-}</a> <br /> <span class='authors'> ${generateAuthors(
+}</a> <br /> <span class='authors' > ${generateAuthors(
   conf.Authors,
   conf.Speaker,
-)} </span></td>
+)} </span></td> ${addLogo(conf.Logo)}
                   </tr>`;
         } else {
           tables += `<tr class='${conf.Type.toLowerCase()}'>
                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-                    <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
+                    <td ${isLogo(conf.Logo)}>${
+  conf.Title
+} <br /> <span class='authors' > ${generateAuthors(
   conf.Authors,
   conf.Speaker,
-)} </span></td>
+)} </span></td> ${addLogo(conf.Logo)}
                   </tr>`;
         }
       });
