@@ -1,6 +1,6 @@
 // import { session } from 'electron';
 import XLSX from 'xlsx';
-// import numWords from 'num-words';
+import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
@@ -108,40 +108,72 @@ function generateTableHeader(setData) {
   const sorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
+  // Add column for time
+  headerString += '<td class="time header"></td>';
   if (setData.setType.toLowerCase() === 'break') {
-    if (Object.keys(sessions).length !== 1) {
-      throw new Error('There is more than one session specified for a break');
-    }
-    const { sessionTitle } = Object.values(setData.sessions)[0];
-    headerString += `<td> ${formatTime(setData.conferences[0]['Start Time'])}</td>`;
-    headerString += `<td> ${sessionTitle}`;
-    headerString += '</tr>';
-    return headerString;
+    return '';
   }
   sessionKeys.forEach((sessionKey) => {
-    headerString += `<td>${sessions[sessionKey].sessionLocation}</td>`;
-  });
-  headerString += '</tr><tr>';
-  sessionKeys.forEach((sessionKey) => {
-    headerString += `<td>${sessions[sessionKey].sessionTitle}</td>`;
-  });
-  headerString += '</tr><tr>';
-  sessionKeys.forEach((sessionKey) => {
-    headerString += `<td>${sessions[sessionKey].sessionChair}</td>`;
+    headerString += `
+    <td class='header'>
+        <h5>
+        ${sessions[sessionKey].sessionTitle} -
+        ${sessions[sessionKey].sessionLocation}\n
+        </h5>
+        <span class='authors'>
+        Chair: ${sessions[sessionKey].sessionChair},
+        <span class='underline'>
+        ${sessions[sessionKey].institution}
+        </span>
+        </span>
+    </td>`;
   });
   headerString += '</tr>';
   return headerString;
 }
 
+function generateRows(conferences) {
+  const rows = {};
+  conferences.forEach((conference) => {
+    if (!rows[conference['Start Time']]) {
+      rows[conference['Start Time']] = [];
+    }
+    rows[conference['Start Time']].push(conference);
+  });
+  return rows;
+}
+
+function generateTableRows(setData) {
+  let rowString = '';
+  const nStreams = Object.keys(setData.sessions).length;
+  const rows = generateRows(setData.conferences, nStreams);
+  const rowSorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  Object.keys(rows)
+    .sort(rowSorter)
+    .forEach((rowKey) => {
+      rowString += '<tr>';
+      const row = rows[rowKey].sort(rowSorter);
+      rowString += `<td class="time">${formatTime(rowKey)}</td>`;
+      row.forEach((conf) => {
+        rowString += `<td >${conf.Title}</td>`;
+      });
+      rowString += '</tr>';
+    });
+  // remember to sort rows by track before outputting
+  return rowString;
+}
+
 function generateTables(parsedData) {
   let tables = '';
   Object.keys(parsedData).forEach((dayKey) => {
+    tables += `<h2> Day ${numWords(dayKey)} Programme</h2>`;
     const dayData = parsedData[dayKey];
     const setKeys = Object.keys(dayData).sort();
     setKeys.forEach((setKey) => {
       const setData = dayData[setKey];
-      tables += '<table>';
+      tables += '<table class="centered striped">';
       tables += generateTableHeader(setData);
+      tables += generateTableRows(setData);
       tables += '</table>';
     });
   });

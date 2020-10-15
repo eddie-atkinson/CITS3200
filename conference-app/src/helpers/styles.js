@@ -1,8 +1,17 @@
 const base = `
+td {
+  text-align: center;
+}
+table {
+  margin-top: 100px;
+}
 .center {
   margin: auto;
   width: 90%;
   padding: 10px;
+}
+td .time {
+  text-align: left;
 }
 .authors {
   color: #58595b;
@@ -13,7 +22,7 @@ const base = `
   padding: 10px;
   margin: 10px;
 }
-.speaker {
+.underline {
   text-decoration: underline;
 }
 body {
@@ -30,7 +39,7 @@ const orange = `
   background-color: #fbb03f;
   color: #ffffff;
 }
-.plenary {
+.header {
   background-color: #fee3c6;
 }
 `;
@@ -40,7 +49,7 @@ const blue = `
   background-color: #1b75bc;
   color: #ffffff;
 }
-.plenary {
+.header {
   background-color: #9fc9eb;
 }
 `;
@@ -50,7 +59,7 @@ const turq = `
   background-color: #643695;
   color: #ffffff;
 }
-.plenary {
+.header {
   background-color: #80deea ;
 }
 `;
@@ -61,7 +70,7 @@ const green = `
   background-color: #39b54a;
   color: #ffffff;
 }
-.plenary {
+.header {
   background-color: #becca8 ;
 }
 `;
