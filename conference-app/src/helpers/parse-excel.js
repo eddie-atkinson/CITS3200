@@ -131,6 +131,7 @@ function generateTables(days, links) {
   return tables;
 }
 
+// eslint-disable-next-line
 function rowToHTML(rowData, theme, title, links, customCSS) {
   const days = orderByDay(rowData);
   return `<html>
@@ -158,35 +159,59 @@ function rowToHTML(rowData, theme, title, links, customCSS) {
   `;
 }
 
+// export default function excelToHTML(formData) {
+//   const data = formData.excelData;
+//   const theme = formData.themeColour;
+//   const title = formData.confName;
+//   let customCSS = formData.cssData;
+//   if (formData.customCSS) {
+//     customCSS = formData.cssData;
+//   } else {
+//     customCSS = '';
+//   }
+//   const wb = XLSX.read(data, {
+//     type: 'binary',
+//   });
+//   const sheetName = wb.SheetNames[0];
+//   const ws = wb.Sheets[sheetName];
+
+//   const obj = ws;
+//   const links = [];
+
+//   Object.values(obj).forEach((val) => {
+//     if (val.l !== undefined && val.h !== undefined) {
+//       const ctitle = val.h;
+//       const clink = val.l.Rel.Target;
+//       links.push({ confTitle: ctitle, confLink: clink });
+//     }
+//   });
+//   const rowData = XLSX.utils.sheet_to_json(ws);
+//   if (rowData.length < 1) {
+//     throw new Error('First sheet in Excel document contains no data');
+//   }
+//   return rowToHTML(rowData, theme, title, links, customCSS);
+// }
+
+function fetchSheets(workbook) {
+  const sheets = {};
+  sheets.sessionSets = workbook.Sheets.Sets;
+  sheets.sessions = workbook.Sheets.Sessions;
+  if (!sheets.sessionSets) {
+    throw new Error('The Sets sheet could not be parsed from the spreadsheet');
+  }
+  if (!sheets.sessions) {
+    throw new Error('The Sessions sheet could not be parsed from the spreadsheet');
+  }
+  return sheets;
+}
+
 export default function excelToHTML(formData) {
   const data = formData.excelData;
-  const theme = formData.themeColour;
-  const title = formData.confName;
-  let customCSS = formData.cssData;
-  if (formData.customCSS) {
-    customCSS = formData.cssData;
-  } else {
-    customCSS = '';
-  }
   const wb = XLSX.read(data, {
     type: 'binary',
   });
-  const sheetName = wb.SheetNames[0];
-  const ws = wb.Sheets[sheetName];
-
-  const obj = ws;
-  const links = [];
-
-  Object.values(obj).forEach((val) => {
-    if (val.l !== undefined && val.h !== undefined) {
-      const ctitle = val.h;
-      const clink = val.l.Rel.Target;
-      links.push({ confTitle: ctitle, confLink: clink });
-    }
-  });
-  const rowData = XLSX.utils.sheet_to_json(ws);
-  if (rowData.length < 1) {
-    throw new Error('First sheet in Excel document contains no data');
-  }
-  return rowToHTML(rowData, theme, title, links, customCSS);
+  // eslint-disable-next-line
+  const { sessions, sessionSets } = fetchSheets(wb);
+  console.log(sessions);
+  console.log(sessionSets);
 }
