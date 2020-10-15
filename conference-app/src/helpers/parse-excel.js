@@ -1,5 +1,6 @@
+// import { session } from 'electron';
 import XLSX from 'xlsx';
-import numWords from 'num-words';
+// import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
@@ -10,40 +11,6 @@ const utc = require('dayjs/plugin/utc');
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
-
-function orderByDay(rowData) {
-  const reducer = (acc, row) => {
-    const intDay = parseInt(row.Day, 10);
-    if (Number.isNaN(intDay)) {
-      throw new Error(
-        'Sheet format invalid, one of the day descriptors could not be parsed as an integer',
-      );
-    }
-    if (!acc[row.Day]) {
-      acc[row.Day] = [];
-    }
-    acc[intDay].push(row);
-    return acc;
-  };
-  return rowData.reduce(reducer, {});
-}
-
-function splitSessions(sessionBlock) {
-  const reducer = (acc, conf) => {
-    const intSess = parseInt(conf.Session, 10);
-    if (Number.isNaN(intSess)) {
-      throw new Error(
-        `Sheet format invalid, conference ${conf.Title}'s session number could not be parsed as an integer`,
-      );
-    }
-    if (!acc[conf.Session]) {
-      acc[conf.Session] = [];
-    }
-    acc[conf.Session].push(conf);
-    return acc;
-  };
-  return sessionBlock.reduce(reducer, {});
-}
 
 function dateFromExcel(excelDate) {
   // Credit: Christopher Scott
@@ -68,129 +35,144 @@ function fetchStyling(theme) {
   return returnTheme;
 }
 
-function generateAuthors(authors, speaker) {
-  if (!authors || !speaker) return '';
-  let returnString = authors;
-  const startIndex = returnString.indexOf(speaker);
-  if (startIndex === -1) {
-    returnString += `, <span class='speaker'>${speaker}</span>`;
-  } else {
-    returnString = `${authors.slice(0, startIndex)}`;
-    returnString += `<span class='speaker'>${speaker}</span>`;
-    returnString += `${authors.slice(startIndex + speaker.length)}`;
-  }
-  return returnString;
-}
-function generateTables(days, links) {
-  let tables = '';
-  const dayKeys = Object.keys(days).sort();
-  dayKeys.forEach((dayKey) => {
-    const dayData = days[dayKey];
-    const sessions = splitSessions(dayData);
-    const sessionKeys = Object.keys(sessions).sort();
-    tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme</h2>`;
-    tables += '<table>';
-    sessionKeys.forEach((sessionKey) => {
-      const session = sessions[sessionKey];
-      const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
-      const conferenceKeys = Object.keys(session).sort(sorter);
-      conferenceKeys.forEach((confKey) => {
-        const conf = session[confKey];
+// function generateAuthors(authors, speaker) {
+//   if (!authors || !speaker) return '';
+//   let returnString = authors;
+//   const startIndex = returnString.indexOf(speaker);
+//   if (startIndex === -1) {
+//     returnString += `, <span class='speaker'>${speaker}</span>`;
+//   } else {
+//     returnString = `${authors.slice(0, startIndex)}`;
+//     returnString += `<span class='speaker'>${speaker}</span>`;
+//     returnString += `${authors.slice(startIndex + speaker.length)}`;
+//   }
+//   return returnString;
+// }
+// function generateTables(days, links) {
+//   let tables = '';
+//   const dayKeys = Object.keys(days).sort();
+//   dayKeys.forEach((dayKey) => {
+//     const dayData = days[dayKey];
+//     const sessions = splitSessions(dayData);
+//     const sessionKeys = Object.keys(sessions).sort();
+//     tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme</h2>`;
+//     tables += '<table>';
+//     sessionKeys.forEach((sessionKey) => {
+//       const session = sessions[sessionKey];
+//       const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
+//       const conferenceKeys = Object.keys(session).sort(sorter);
+//       conferenceKeys.forEach((confKey) => {
+//         const conf = session[confKey];
 
-        Object.values(links).forEach((link) => {
-          if (conf.Title === link.confTitle) {
-            conf.Link = link.confLink;
-          }
-        });
-        const confTime = dateFromExcel(conf['Start Time']);
-        // Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
-        // We want the time in its original format so we specify UTC
-        if (conf.Link !== undefined) {
-          tables += `<tr class='${conf.Type.toLowerCase()}'>
-                    <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-                    <td><a href="${conf.Link}">${
-  conf.Title
-}</a> <br /> <span class='authors'> ${generateAuthors(
-  conf.Authors,
-  conf.Speaker,
-)} </span></td>
-                  </tr>`;
-        } else {
-          tables += `<tr class='${conf.Type.toLowerCase()}'>
-                    <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-                    <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
-  conf.Authors,
-  conf.Speaker,
-)} </span></td>
-                  </tr>`;
-        }
-      });
+//         Object.values(links).forEach((link) => {
+//           if (conf.Title === link.confTitle) {
+//             conf.Link = link.confLink;
+//           }
+//         });
+//         const confTime = dateFromExcel(conf['Start Time']);
+//      //Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
+//         //We want the time in its original format so we specify UTC
+//         if (conf.Link !== undefined) {
+//           tables += `<tr class='${conf.Type.toLowerCase()}'>
+//                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
+//                     <td><a href="${conf.Link}">${
+//   conf.Title
+// }</a> <br /> <span class='authors'> ${generateAuthors(
+//   conf.Authors,
+//   conf.Speaker,
+// )} </span></td>
+//                   </tr>`;
+//         } else {
+//           tables += `<tr class='${conf.Type.toLowerCase()}'>
+//                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
+//                     <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
+//   conf.Authors,
+//   conf.Speaker,
+// )} </span></td>
+//                   </tr>`;
+//         }
+//       });
+//     });
+//     tables += '</table>';
+//   });
+//   return tables;
+// }
+
+function formatTime(time) {
+  return dayjs(time).utc().format('h:mm');
+}
+
+function generateTableHeader(setData) {
+  let headerString = '';
+  const { sessions } = setData;
+  const sorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  const sessionKeys = Object.keys(sessions).sort(sorter);
+  headerString += '<tr>';
+  if (setData.setType.toLowerCase() === 'break') {
+    if (Object.keys(sessions).length !== 1) {
+      throw new Error('There is more than one session specified for a break');
+    }
+    const { sessionTitle } = Object.values(setData.sessions)[0];
+    headerString += `<td> ${formatTime(setData.conferences[0]['Start Time'])}</td>`;
+    headerString += `<td> ${sessionTitle}`;
+    headerString += '</tr>';
+    return headerString;
+  }
+  sessionKeys.forEach((sessionKey) => {
+    headerString += `<td>${sessions[sessionKey].sessionLocation}</td>`;
+  });
+  headerString += '</tr><tr>';
+  sessionKeys.forEach((sessionKey) => {
+    headerString += `<td>${sessions[sessionKey].sessionTitle}</td>`;
+  });
+  headerString += '</tr><tr>';
+  sessionKeys.forEach((sessionKey) => {
+    headerString += `<td>${sessions[sessionKey].sessionChair}</td>`;
+  });
+  headerString += '</tr>';
+  return headerString;
+}
+
+function generateTables(parsedData) {
+  let tables = '';
+  Object.keys(parsedData).forEach((dayKey) => {
+    const dayData = parsedData[dayKey];
+    const setKeys = Object.keys(dayData).sort();
+    setKeys.forEach((setKey) => {
+      const setData = dayData[setKey];
+      tables += '<table>';
+      tables += generateTableHeader(setData);
+      tables += '</table>';
     });
-    tables += '</table>';
   });
   return tables;
 }
 
-// eslint-disable-next-line
-function rowToHTML(rowData, theme, title, links, customCSS) {
-  const days = orderByDay(rowData);
+function dataToHTML(parsedData, themeColour, confName, cssData) {
   return `<html>
-      <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-      </head>
-      <style>
-        ${base}
-        ${fetchStyling(theme)}
-        ${customCSS}
-      </style>
-      <title></title>
-      </head>
-      <body>
-        <div class='center'>
-          <h1>
-            ${title}
-          </h1>
-          ${generateTables(days, links)}
-        </div>
-      </body>
-      </html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <style>
+      ${base}
+      ${fetchStyling(themeColour)}
+      ${cssData}
+    </style>
+    <title></title>
+    </head>
+    <body>
+      <div class='center'>
+        <h1>
+          ${confName}
+        </h1>
+        ${generateTables(parsedData)}
+      </div>
+    </body>
+    </html>
   `;
 }
-
-// export default function excelToHTML(formData) {
-//   const data = formData.excelData;
-//   const theme = formData.themeColour;
-//   const title = formData.confName;
-//   let customCSS = formData.cssData;
-//   if (formData.customCSS) {
-//     customCSS = formData.cssData;
-//   } else {
-//     customCSS = '';
-//   }
-//   const wb = XLSX.read(data, {
-//     type: 'binary',
-//   });
-//   const sheetName = wb.SheetNames[0];
-//   const ws = wb.Sheets[sheetName];
-
-//   const obj = ws;
-//   const links = [];
-
-//   Object.values(obj).forEach((val) => {
-//     if (val.l !== undefined && val.h !== undefined) {
-//       const ctitle = val.h;
-//       const clink = val.l.Rel.Target;
-//       links.push({ confTitle: ctitle, confLink: clink });
-//     }
-//   });
-//   const rowData = XLSX.utils.sheet_to_json(ws);
-//   if (rowData.length < 1) {
-//     throw new Error('First sheet in Excel document contains no data');
-//   }
-//   return rowToHTML(rowData, theme, title, links, customCSS);
-// }
 
 function fetchSheets(workbook) {
   const sheets = {};
@@ -211,21 +193,22 @@ function parseSessions(sessionsData) {
     if (!sessionsObj[session.Session]) {
       sessionsObj[session.Session] = [];
     }
+    const sessionObj = session;
+    sessionObj['Start Time'] = dateFromExcel(session['Start Time']);
+    sessionObj['End Time'] = dateFromExcel(session['End Time']);
     sessionsObj[session.Session].push(session);
   });
   return sessionsObj;
 }
 
-// eslint-disable-next-line
 function parseSets(setsData, sessionsData) {
-  // eslint-disable-next-line
   const finalData = {};
   Object.keys(setsData).forEach((key) => {
     const {
       Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
     } = setsData[key];
-    const sessionsArr = sessionsData[Session];
-    if (!sessionsArr) {
+    const confsArr = sessionsData[Session];
+    if (!confsArr) {
       throw new Error(
         `Set ${Set} references session ${Session}, but there are no conferences specified for session ${7}`,
       );
@@ -234,34 +217,41 @@ function parseSets(setsData, sessionsData) {
       finalData[Day] = {};
     }
     if (!finalData[Day][Set]) {
-      finalData[Day][Set] = {};
+      finalData[Day][Set] = {
+        conferences: [],
+        sessions: {},
+        setType: Type,
+      };
     }
     if (!finalData[Day][Set][Session]) {
-      finalData[Day][Set][Session] = {
+      finalData[Day][Set].sessions[Session] = {
         sessionTitle: Title,
         sessionChair: Chair,
         institution: Institution,
         sessionTrack: Track,
-        sessionType: Type,
         sessionLocation: Location,
-        sessionConfs: sessionsArr,
-        confLength: sessionsArr.length,
       };
+      finalData[Day][Set].conferences.push(...confsArr);
     }
   });
-  console.log(sessionsData);
-  console.log(finalData);
+  return finalData;
 }
 
 export default function excelToHTML(formData) {
-  const data = formData.excelData;
-  const wb = XLSX.read(data, {
+  const {
+    excelData, themeColour, confName, customCSS,
+  } = formData;
+  let { cssData } = formData;
+  if (!customCSS) {
+    cssData = '';
+  }
+  const wb = XLSX.read(excelData, {
     type: 'binary',
   });
   const { sessionsSheet, sessionSetsSheet } = fetchSheets(wb);
   let sessionsData = XLSX.utils.sheet_to_json(sessionsSheet);
   const setsData = XLSX.utils.sheet_to_json(sessionSetsSheet);
   sessionsData = parseSessions(sessionsData);
-  // eslint-disable-next-line
   const parsedData = parseSets(setsData, sessionsData);
+  return dataToHTML(parsedData, themeColour, confName, cssData);
 }
