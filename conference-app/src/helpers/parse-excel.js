@@ -194,15 +194,63 @@ function rowToHTML(rowData, theme, title, links, customCSS) {
 
 function fetchSheets(workbook) {
   const sheets = {};
-  sheets.sessionSets = workbook.Sheets.Sets;
-  sheets.sessions = workbook.Sheets.Sessions;
-  if (!sheets.sessionSets) {
+  sheets.sessionSetsSheet = workbook.Sheets.Sets;
+  sheets.sessionsSheet = workbook.Sheets.Sessions;
+  if (!sheets.sessionSetsSheet) {
     throw new Error('The Sets sheet could not be parsed from the spreadsheet');
   }
-  if (!sheets.sessions) {
+  if (!sheets.sessionsSheet) {
     throw new Error('The Sessions sheet could not be parsed from the spreadsheet');
   }
   return sheets;
+}
+
+function parseSessions(sessionsData) {
+  const sessionsObj = {};
+  Object.values(sessionsData).forEach((session) => {
+    if (!sessionsObj[session.Session]) {
+      sessionsObj[session.Session] = [];
+    }
+    sessionsObj[session.Session].push(session);
+  });
+  return sessionsObj;
+}
+
+// eslint-disable-next-line
+function parseSets(setsData, sessionsData) {
+  // eslint-disable-next-line
+  const finalData = {};
+  Object.keys(setsData).forEach((key) => {
+    const {
+      Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
+    } = setsData[key];
+    const sessionsArr = sessionsData[Session];
+    if (!sessionsArr) {
+      throw new Error(
+        `Set ${Set} references session ${Session}, but there are no conferences specified for session ${7}`,
+      );
+    }
+    if (!finalData[Day]) {
+      finalData[Day] = {};
+    }
+    if (!finalData[Day][Set]) {
+      finalData[Day][Set] = {};
+    }
+    if (!finalData[Day][Set][Session]) {
+      finalData[Day][Set][Session] = {
+        sessionTitle: Title,
+        sessionChair: Chair,
+        institution: Institution,
+        sessionTrack: Track,
+        sessionType: Type,
+        sessionLocation: Location,
+        sessionConfs: sessionsArr,
+        confLength: sessionsArr.length,
+      };
+    }
+  });
+  console.log(sessionsData);
+  console.log(finalData);
 }
 
 export default function excelToHTML(formData) {
@@ -210,8 +258,10 @@ export default function excelToHTML(formData) {
   const wb = XLSX.read(data, {
     type: 'binary',
   });
+  const { sessionsSheet, sessionSetsSheet } = fetchSheets(wb);
+  let sessionsData = XLSX.utils.sheet_to_json(sessionsSheet);
+  const setsData = XLSX.utils.sheet_to_json(sessionSetsSheet);
+  sessionsData = parseSessions(sessionsData);
   // eslint-disable-next-line
-  const { sessions, sessionSets } = fetchSheets(wb);
-  console.log(sessions);
-  console.log(sessionSets);
+  const parsedData = parseSets(setsData, sessionsData);
 }
