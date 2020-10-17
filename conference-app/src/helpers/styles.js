@@ -1,17 +1,8 @@
 const base = `
-td {
-  text-align: center;
-}
-table {
-  margin-top: 100px;
-}
 .center {
   margin: auto;
   width: 90%;
   padding: 10px;
-}
-td .time {
-  text-align: left;
 }
 .authors {
   color: #58595b;
@@ -31,6 +22,15 @@ body {
 h2 {
   text-transform: uppercase;
   font-size: 200%;
+}
+.day {
+  margin: 100px;
+}
+.time {
+  text-align: left !important;
+}
+.break-title {
+  text-align: center;
 }
 `;
 

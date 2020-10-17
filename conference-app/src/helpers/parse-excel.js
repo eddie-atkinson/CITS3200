@@ -35,19 +35,20 @@ function fetchStyling(theme) {
   return returnTheme;
 }
 
-// function generateAuthors(authors, speaker) {
-//   if (!authors || !speaker) return '';
-//   let returnString = authors;
-//   const startIndex = returnString.indexOf(speaker);
-//   if (startIndex === -1) {
-//     returnString += `, <span class='speaker'>${speaker}</span>`;
-//   } else {
-//     returnString = `${authors.slice(0, startIndex)}`;
-//     returnString += `<span class='speaker'>${speaker}</span>`;
-//     returnString += `${authors.slice(startIndex + speaker.length)}`;
-//   }
-//   return returnString;
-// }
+function generateAuthors(authors, speaker) {
+  if (!authors || !speaker) return '';
+  let returnString = authors;
+  const startIndex = returnString.indexOf(speaker);
+  if (startIndex === -1) {
+    returnString += `, <span class='underline'>${speaker}</span>`;
+  } else {
+    returnString = `${authors.slice(0, startIndex)}`;
+    returnString += `<span class='underline'>${speaker}</span>`;
+    returnString += `${authors.slice(startIndex + speaker.length)}`;
+  }
+  return returnString;
+}
+
 // function generateTables(days, links) {
 //   let tables = '';
 //   const dayKeys = Object.keys(days).sort();
@@ -105,7 +106,7 @@ function formatTime(time) {
 function generateTableHeader(setData) {
   let headerString = '';
   const { sessions } = setData;
-  const sorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  const sorter = (a, b) => a.sessionTrack - b.sessionTrack;
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
   // Add column for time
@@ -143,19 +144,32 @@ function generateRows(conferences) {
   return rows;
 }
 
-function generateTableRows(setData) {
+function generateTableRows(setData, setType) {
   let rowString = '';
+  if (setType.toLowerCase() === 'break') {
+    const confBreak = setData.conferences.pop();
+    rowString += `<tr class="${setType}">`;
+    rowString += `<td class="time"> ${formatTime(confBreak['Start Time'])}</td>`;
+    rowString += `<td class="break-title"> ${confBreak.Title}</td>`;
+    rowString += '</tr>';
+    return rowString;
+  }
   const nStreams = Object.keys(setData.sessions).length;
   const rows = generateRows(setData.conferences, nStreams);
-  const rowSorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  const rowSorter = (a, b) => a.sessionTrack - b.sessionTrack;
   Object.keys(rows)
     .sort(rowSorter)
     .forEach((rowKey) => {
-      rowString += '<tr>';
+      rowString += `<tr class="${setType}">`;
       const row = rows[rowKey].sort(rowSorter);
       rowString += `<td class="time">${formatTime(rowKey)}</td>`;
       row.forEach((conf) => {
-        rowString += `<td >${conf.Title}</td>`;
+        rowString += `
+        <td >${conf.Title}
+          <span class = 'authors'>
+            ${generateAuthors(conf.Authors, conf.Speaker)}
+          </span>
+        </td>`;
       });
       rowString += '</tr>';
     });
@@ -166,16 +180,19 @@ function generateTableRows(setData) {
 function generateTables(parsedData) {
   let tables = '';
   Object.keys(parsedData).forEach((dayKey) => {
+    tables += `<div class = "day day-${dayKey}">`;
     tables += `<h2> Day ${numWords(dayKey)} Programme</h2>`;
     const dayData = parsedData[dayKey];
     const setKeys = Object.keys(dayData).sort();
     setKeys.forEach((setKey) => {
       const setData = dayData[setKey];
-      tables += '<table class="centered striped">';
+      const { setType } = setData;
+      tables += '<table class="centered">';
       tables += generateTableHeader(setData);
-      tables += generateTableRows(setData);
+      tables += generateTableRows(setData, setType);
       tables += '</table>';
     });
+    tables += '</div>';
   });
   return tables;
 }
