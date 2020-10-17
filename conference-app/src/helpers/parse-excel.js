@@ -222,7 +222,7 @@ function parseSets(setsData, sessionsData) {
     const confsArr = sessionsData[Session];
     if (!confsArr) {
       throw new Error(
-        `Set ${Set} references session ${Session}, but there are no conferences specified for session ${7}`,
+        `Set ${Set} references session ${Session}, but there are no conferences specified for session ${Session}`,
       );
     }
     if (!finalData[Day]) {
