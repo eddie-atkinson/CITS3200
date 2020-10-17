@@ -67,4 +67,6 @@ describe('Build.vue', () => {
     cy.get('[data-cy=finish-btn]').click();
     cy.contains('.v-card__title', 'Conference Programme Creator');
   });
+
+  it('correctly uploads file and downloads', () => {});
 });
