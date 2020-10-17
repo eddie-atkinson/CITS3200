@@ -30,7 +30,9 @@ h2 {
   text-align: left !important;
 }
 .break-title {
-  text-align: center;
+  padding-left: 0;
+  margin-left: 0;
+  text-align: left !important;
 }
 `;
 
