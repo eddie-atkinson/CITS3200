@@ -34,6 +34,16 @@ h2 {
   margin-left: 0;
   text-align: left !important;
 }
+body {
+  font-family: "Century Gothic";
+}
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+a:hover {
+  text-decoration: underline;
+}
 `;
 
 const orange = `

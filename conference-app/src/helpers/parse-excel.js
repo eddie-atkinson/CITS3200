@@ -164,12 +164,16 @@ function generateTableRows(setData, setType) {
       const row = rows[rowKey].sort(rowSorter);
       rowString += `<td class="time">${formatTime(rowKey)}</td>`;
       row.forEach((conf) => {
-        rowString += `
-        <td >${conf.Title}
-          <span class = 'authors'>
-            ${generateAuthors(conf.Authors, conf.Speaker)}
-          </span>
-        </td>`;
+        rowString += '<td>';
+        if (conf.Link) {
+          rowString += `<a href="${conf.Link}">`;
+        }
+        rowString += `${conf.Title} <span class='authors'>${generateAuthors(
+          conf.Authors,
+          conf.Speaker,
+        )}</span>`;
+        rowString += '</a>';
+        rowString += '</td>';
       });
       rowString += '</tr>';
     });
