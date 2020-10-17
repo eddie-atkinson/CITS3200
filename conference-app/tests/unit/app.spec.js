@@ -1,15 +1,10 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'; // Change this when vue init if required
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
 import Vue from 'vue';
-import App from '../../src/App.vue'; // page being tested - Change this when vue init
+import App from '@/App.vue'; // page being tested
 
 Vue.use(Vuetify);
-
-/*
-None of the following will work until vue is appropriately installed and configured
-REF https://jestjs.io/docs/en/getting-started for jest guide :)
-*/
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -29,7 +24,7 @@ describe('Mounted App', () => {
     vuetify = new Vuetify(); // Instantiate a new Vue instance
   });
 
-  test('is instantiated', () => {
+  test('is instantiated', () => { // App.vue correctly mounts
     const wrapper = shallowMount(App, {
       localVue,
       vuetify,
@@ -48,29 +43,54 @@ describe('Mounted App', () => {
   });
   */
 
+  // currently this will not work due to start over button and intro card in diff views
+  // perhaps this is best suited as an e2e test
+  /*
+  it('starts over correctly when pressed from landing page', async () => {
+    const wrapper = mount(App, {
+      localVue,
+      vuetify,
+      router,
+    });
+
+    const restartButton = wrapper.find('.v-btn--router');
+    const vcardWrappers = wrapper.findAll('v-card-text');
+    expect(vcardWrappers.exists()).toBe(true);
+
+    await restartButton.trigger('click');
+
+    expect(vcardWrappers[0]).toContain('Welcome to the Australian');
+    expect(vcardWrappers[1]).toContain('To get started');
+  });
+  */
+
   it('switches between light/dark mode', async () => {
     const wrapper = mount(App, {
       localVue,
       vuetify,
       router,
-    }); // includes child elements
+    }); // mount() includes child elements
 
-    const bodyWrapper = wrapper.find('div');
+    const bodyWrapper = wrapper.find('div'); // colour scheme is applied to the first div of the document
 
     const darkModeButton = wrapper.find('.v-btn');
     expect(darkModeButton.exists()).toBe(true); // we can find our button correctly
 
     await darkModeButton.trigger('click');
-
     expect(bodyWrapper.classes()).toContain('theme--dark');
-
     await darkModeButton.trigger('click');
     expect(bodyWrapper.classes()).toContain('theme--light');
   });
 
   /*
+  it('correctly renders excel spreadsheet', () => {
+
+  });
+  */
+
+  /*
     Snapshot testing, will initialise snapshot upon first run and all following
-    If snapshot was intended to be modified, snapshot can be updated with npm test -- -u
+    If snapshot was intended to be modified, snapshot can be updated with npm run test:unit -- -u
   */
 
   it('matches last snapshot', () => {

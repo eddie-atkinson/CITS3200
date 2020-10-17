@@ -9,11 +9,32 @@
 // /* eslint-disable import/no-extraneous-dependencies, global-require */
 // const webpack = require('@cypress/webpack-preprocessor')
 
+const fs = require('fs');
+const os = require('os');
+
+let dlFolder;
+
+if (os.platform() === 'win32') {
+  dlFolder = `${os.homedir()}/Downloads/`;
+} else if (os.platform() === 'linux') {
+  dlFolder = `${os.homedir()}/Downloads/`;
+}
+
 module.exports = (on, config) => {
   // on('file:preprocessor', webpack({
   //  webpackOptions: require('@vue/cli-service/webpack.config'),
   //  watchOptions: {}
   // }))
+
+  on('task', {
+    readFileMaybe(filename) {
+      if (fs.existsSync(dlFolder + filename)) {
+        return true;
+      }
+
+      return false;
+    },
+  });
 
   return {
     ...config,
