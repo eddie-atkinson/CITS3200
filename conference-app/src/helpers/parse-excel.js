@@ -60,16 +60,17 @@ function generateTableHeader(setData) {
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
   // Add column for time
-  headerString += '<td class="time header"></td>';
+  headerString += '<td class="time header" style= "width: 5%;"></td>';
   if (setData.setType.toLowerCase() === 'break') {
     return '';
   }
+  const size = 95 / sessionKeys.length;
   sessionKeys.forEach((sessionKey) => {
     const {
       sessionTitle, sessionLocation, sessionChair, institution,
     } = sessions[sessionKey];
     headerString += `
-    <td class='header'>
+    <td class='header' style='width: ${size}%;'>
         <h5>
         ${sessionTitle} -
         ${sessionLocation}\n
@@ -89,6 +90,7 @@ function generateTableHeader(setData) {
     headerString += '</td>';
   });
   headerString += '</tr>';
+
   return headerString;
 }
 
