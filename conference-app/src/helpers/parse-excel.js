@@ -1,4 +1,3 @@
-// import { session } from 'electron';
 import XLSX from 'xlsx';
 import numWords from 'num-words';
 import {
@@ -35,68 +34,19 @@ function fetchStyling(theme) {
   return returnTheme;
 }
 
-// function generateAuthors(authors, speaker) {
-//   if (!authors || !speaker) return '';
-//   let returnString = authors;
-//   const startIndex = returnString.indexOf(speaker);
-//   if (startIndex === -1) {
-//     returnString += `, <span class='speaker'>${speaker}</span>`;
-//   } else {
-//     returnString = `${authors.slice(0, startIndex)}`;
-//     returnString += `<span class='speaker'>${speaker}</span>`;
-//     returnString += `${authors.slice(startIndex + speaker.length)}`;
-//   }
-//   return returnString;
-// }
-// function generateTables(days, links) {
-//   let tables = '';
-//   const dayKeys = Object.keys(days).sort();
-//   dayKeys.forEach((dayKey) => {
-//     const dayData = days[dayKey];
-//     const sessions = splitSessions(dayData);
-//     const sessionKeys = Object.keys(sessions).sort();
-//     tables += `<h2 class='title'> Day  ${numWords(dayKey)} Programme</h2>`;
-//     tables += '<table>';
-//     sessionKeys.forEach((sessionKey) => {
-//       const session = sessions[sessionKey];
-//       const sorter = (a, b) => session[a]['Start Time'] - session[b]['Start Time'];
-//       const conferenceKeys = Object.keys(session).sort(sorter);
-//       conferenceKeys.forEach((confKey) => {
-//         const conf = session[confKey];
-
-//         Object.values(links).forEach((link) => {
-//           if (conf.Title === link.confTitle) {
-//             conf.Link = link.confLink;
-//           }
-//         });
-//         const confTime = dateFromExcel(conf['Start Time']);
-//      //Time is assumed to be in UTC when parsed from Excel, DayJS it changes to current timezone
-//         //We want the time in its original format so we specify UTC
-//         if (conf.Link !== undefined) {
-//           tables += `<tr class='${conf.Type.toLowerCase()}'>
-//                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-//                     <td><a href="${conf.Link}">${
-//   conf.Title
-// }</a> <br /> <span class='authors'> ${generateAuthors(
-//   conf.Authors,
-//   conf.Speaker,
-// )} </span></td>
-//                   </tr>`;
-//         } else {
-//           tables += `<tr class='${conf.Type.toLowerCase()}'>
-//                     <td> ${dayjs(confTime).utc().format('h:mm')}</td>
-//                     <td>${conf.Title} <br /> <span class='authors'> ${generateAuthors(
-//   conf.Authors,
-//   conf.Speaker,
-// )} </span></td>
-//                   </tr>`;
-//         }
-//       });
-//     });
-//     tables += '</table>';
-//   });
-//   return tables;
-// }
+function generateAuthors(authors, speaker) {
+  if (!authors || !speaker) return '';
+  let returnString = authors;
+  const startIndex = returnString.indexOf(speaker);
+  if (startIndex === -1) {
+    returnString += `, <span class='underline'>${speaker}</span>`;
+  } else {
+    returnString = `${authors.slice(0, startIndex)}`;
+    returnString += `<span class='underline'>${speaker}</span>`;
+    returnString += `${authors.slice(startIndex + speaker.length)}`;
+  }
+  return returnString;
+}
 
 function formatTime(time) {
   return dayjs(time).utc().format('h:mm');
@@ -105,7 +55,7 @@ function formatTime(time) {
 function generateTableHeader(setData) {
   let headerString = '';
   const { sessions } = setData;
-  const sorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  const sorter = (a, b) => a.sessionTrack - b.sessionTrack;
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
   // Add column for time
@@ -132,50 +82,80 @@ function generateTableHeader(setData) {
   return headerString;
 }
 
-function generateRows(conferences) {
+function generateRows(setData) {
+  const { conferences } = setData;
+  const mappingTable = Object.keys(setData.sessions).reduce((acc, session) => {
+    acc[session] = setData.sessions[session].sessionTrack;
+    return acc;
+  }, {});
   const rows = {};
   conferences.forEach((conference) => {
     if (!rows[conference['Start Time']]) {
-      rows[conference['Start Time']] = [];
+      rows[conference['Start Time']] = {};
     }
-    rows[conference['Start Time']].push(conference);
+    rows[conference['Start Time']][mappingTable[conference.Session]] = conference;
   });
   return rows;
 }
 
-function generateTableRows(setData) {
+function generateTableRows(setData, setType) {
   let rowString = '';
+  if (setType.toLowerCase() === 'break') {
+    const confBreak = setData.conferences.pop();
+    rowString += `<tr class="${setType}">`;
+    rowString += `<td class="time"> ${formatTime(confBreak['Start Time'])}</td>`;
+    rowString += `<td class="break-title"> ${confBreak.Title}</td>`;
+    rowString += '</tr>';
+    return rowString;
+  }
   const nStreams = Object.keys(setData.sessions).length;
-  const rows = generateRows(setData.conferences, nStreams);
-  const rowSorter = (a, b) => (a.sessionTrack < b.sessionTrack ? a : b);
+  const rows = generateRows(setData, nStreams);
+  const timeSorter = (a, b) => new Date(a) - new Date(b);
+  const streamNums = Array.from({ length: nStreams }, (x, i) => i + 1).map(String);
   Object.keys(rows)
-    .sort(rowSorter)
-    .forEach((rowKey) => {
-      rowString += '<tr>';
-      const row = rows[rowKey].sort(rowSorter);
-      rowString += `<td class="time">${formatTime(rowKey)}</td>`;
-      row.forEach((conf) => {
-        rowString += `<td >${conf.Title}</td>`;
+    .sort(timeSorter)
+    .forEach((row) => {
+      rowString += `<tr class=${setType}>`;
+      rowString += `<td class="time">${formatTime(row)}</td>`;
+      streamNums.forEach((streamNum) => {
+        if (!rows[row][streamNum]) {
+          rowString += '<td></td>';
+        } else {
+          const {
+            Link, Title, Authors, Speaker,
+          } = rows[row][streamNum];
+          rowString += `<td class=${numWords(streamNum)}>`;
+          if (Link) {
+            rowString += `<a href=${Link}>`;
+          }
+          rowString += `${Title} <span class='authors'>${generateAuthors(Authors, Speaker)}</span>`;
+          if (Link) {
+            rowString += '</a>';
+          }
+          rowString += '</td>';
+        }
       });
       rowString += '</tr>';
     });
-  // remember to sort rows by track before outputting
   return rowString;
 }
 
 function generateTables(parsedData) {
   let tables = '';
   Object.keys(parsedData).forEach((dayKey) => {
+    tables += `<div class = "day day-${dayKey}">`;
     tables += `<h2> Day ${numWords(dayKey)} Programme</h2>`;
     const dayData = parsedData[dayKey];
     const setKeys = Object.keys(dayData).sort();
     setKeys.forEach((setKey) => {
       const setData = dayData[setKey];
-      tables += '<table class="centered striped">';
+      const { setType } = setData;
+      tables += '<table class="centered">';
       tables += generateTableHeader(setData);
-      tables += generateTableRows(setData);
+      tables += generateTableRows(setData, setType);
       tables += '</table>';
     });
+    tables += '</div>';
   });
   return tables;
 }

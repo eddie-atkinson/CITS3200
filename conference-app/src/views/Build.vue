@@ -84,7 +84,7 @@
                 :loading='loading'
                 id='build-programme-btn'
                 data-cy='build-programme-btn'
-                @click='buildProgramme'
+                @click='buildButton'
                 >
                   Build programme
                 </v-btn>
@@ -212,8 +212,13 @@ export default {
       };
       await reader.readAsBinaryString(file);
     },
-    buildProgramme() {
+    buildButton() {
       this.loading = true;
+      setTimeout(() => {
+        this.buildProgramme();
+      }, 1000);
+    },
+    buildProgramme() {
       try {
         this.htmlData = excelToHTML(this.formData);
       } catch (e) {
