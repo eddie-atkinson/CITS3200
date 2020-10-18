@@ -77,11 +77,14 @@ function generateTableHeader(setData) {
     if (sessionChair) {
       headerString += `
       <span class='authors'>
-        Chair: ${sessions[sessionKey].sessionChair},
+        Chair: ${sessions[sessionKey].sessionChair}`;
+      if (institution) {
+        headerString += `,
         <span class='underline'>
         ${institution}
-        </span>
         </span>`;
+      }
+      headerString += '</span>';
     }
     headerString += '</td>';
   });
