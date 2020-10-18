@@ -52,6 +52,23 @@ function generateAuthors(authors, speaker) {
 function formatTime(time) {
   return dayjs(time).utc().format('h:mm');
 }
+function addLogo(logo) {
+  let finallogo = '';
+  if (logo) {
+    finallogo = `This session's sponsor: <br> <img src="${logo}" style ="display: block; margin-left: auto; margin-right: auto; max-width: 200px; height: auto;">`;
+  }
+  return finallogo;
+}
+function isLogo(length, sessions) {
+  let count = 0;
+  let i;
+  for (i = 0; i < length; i += 1) {
+    if (sessions[i].sessionSponsor) {
+      count += 1;
+    }
+  }
+  return count > 0;
+}
 
 function generateTableHeader(setData) {
   let headerString = '';
@@ -60,35 +77,37 @@ function generateTableHeader(setData) {
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
   // Add column for time
-  headerString += '<td class="time header"></td>';
+  headerString += '<td class="time header" style= "width: 5%;"></td>';
   if (setData.setType.toLowerCase() === 'break') {
     return '';
   }
+  const size = 95 / sessionKeys.length;
   sessionKeys.forEach((sessionKey) => {
-    const {
-      sessionTitle, sessionLocation, sessionChair, institution,
-    } = sessions[sessionKey];
     headerString += `
-    <td class='header'>
+    <td class='header' style='width: ${size}%;'>
         <h5>
-        ${sessionTitle} -
-        ${sessionLocation}\n
-        </h5>`;
-    if (sessionChair) {
-      headerString += `
-      <span class='authors'>
-        Chair: ${sessions[sessionKey].sessionChair}`;
-      if (institution) {
-        headerString += `,
+        ${sessions[sessionKey].sessionTitle} -
+        ${sessions[sessionKey].sessionLocation}\n
+        </h5>
+        <span class='authors'>
+        Chair: ${sessions[sessionKey].sessionChair},
         <span class='underline'>
-        ${institution}
-        </span>`;
-      }
-      headerString += '</span>';
-    }
-    headerString += '</td>';
+        ${sessions[sessionKey].institution}
+        </span>
+        </span>
+    </td>`;
   });
   headerString += '</tr>';
+  if (isLogo(sessionKeys.length, sessions)) {
+    headerString += '<tr class="logo"> <td class="time" style= "width: 5%"></td>';
+    sessionKeys.forEach((sessionKey) => {
+      headerString += `
+      <td style='width:${size}%;'>
+         ${addLogo(sessions[sessionKey].sessionSponsor)}
+      </td>`;
+    });
+    headerString += '</tr>';
+  }
   return headerString;
 }
 
@@ -212,7 +231,6 @@ function fetchSheets(workbook) {
 function parseSessions(sessionsData) {
   const sessionsObj = {};
   const firstDay = sessionsData[0].Day;
-  console.log(firstDay);
   Object.values(sessionsData).forEach((session) => {
     if (session.Day !== firstDay) {
       throw new Error(
@@ -235,7 +253,7 @@ function parseSets(setsData, sessionsData) {
   const finalData = {};
   Object.keys(setsData).forEach((setKey) => {
     const {
-      Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
+      Set, Session, Title, Chair, Institution, Track, Type, Location, Day, Logo,
     } = setsData[
       setKey
     ];
@@ -259,6 +277,7 @@ function parseSets(setsData, sessionsData) {
         institution: Institution,
         sessionTrack: Track,
         sessionLocation: Location,
+        sessionSponsor: Logo,
       };
       finalData[Day][Set].conferences.push(...confsArr);
     }
