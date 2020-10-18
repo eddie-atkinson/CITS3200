@@ -219,10 +219,8 @@ function parseSets(setsData, sessionsData) {
   const finalData = {};
   Object.keys(setsData).forEach((key) => {
     const {
-      Set, Session, Title, Chair, Institution, Track, Type, Location, Day, Logo,
-    } = setsData[
-      key
-    ];
+      Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
+    } = setsData[key];
     const confsArr = sessionsData[Session];
     if (!confsArr) {
       throw new Error(
@@ -246,7 +244,6 @@ function parseSets(setsData, sessionsData) {
         institution: Institution,
         sessionTrack: Track,
         sessionLocation: Location,
-        sessionSponsor: Logo,
       };
       finalData[Day][Set].conferences.push(...confsArr);
     }
