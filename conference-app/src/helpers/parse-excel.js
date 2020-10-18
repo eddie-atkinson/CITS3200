@@ -65,19 +65,25 @@ function generateTableHeader(setData) {
     return '';
   }
   sessionKeys.forEach((sessionKey) => {
+    const {
+      sessionTitle, sessionLocation, sessionChair, institution,
+    } = sessions[sessionKey];
     headerString += `
     <td class='header'>
         <h5>
-        ${sessions[sessionKey].sessionTitle} -
-        ${sessions[sessionKey].sessionLocation}\n
-        </h5>
-        <span class='authors'>
+        ${sessionTitle} -
+        ${sessionLocation}\n
+        </h5>`;
+    if (sessionChair) {
+      headerString += `
+      <span class='authors'>
         Chair: ${sessions[sessionKey].sessionChair},
         <span class='underline'>
-        ${sessions[sessionKey].institution}
+        ${institution}
         </span>
-        </span>
-    </td>`;
+        </span>`;
+    }
+    headerString += '</td>';
   });
   headerString += '</tr>';
   return headerString;
