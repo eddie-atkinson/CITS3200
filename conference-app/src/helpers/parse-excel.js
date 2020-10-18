@@ -211,7 +211,14 @@ function fetchSheets(workbook) {
 
 function parseSessions(sessionsData) {
   const sessionsObj = {};
+  const firstDay = sessionsData[0].Day;
+  console.log(firstDay);
   Object.values(sessionsData).forEach((session) => {
+    if (session.Day !== firstDay) {
+      throw new Error(
+        'Set contains sessions on differing days, all sessions in a set should occur on the same day',
+      );
+    }
     validateSession(session);
     if (!sessionsObj[session.Session]) {
       sessionsObj[session.Session] = [];
@@ -234,6 +241,7 @@ function parseSets(setsData, sessionsData) {
     ];
     const confsArr = sessionsData[Session];
     validateSet(setsData[setKey], confsArr);
+
     if (!finalData[Day]) {
       finalData[Day] = {};
     }
