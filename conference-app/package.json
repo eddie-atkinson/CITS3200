@@ -1,5 +1,8 @@
 {
   "name": "conference-app",
+  "productName": "ACG Conference App",
+  "author": "Eddie Atkinson, Jesse Carter, Isabelle Yu, Jesse Kilcullen, Jianxiang Li",
+  "description": "Conference programme creation app for ACG",
   "version": "0.1.0",
   "private": true,
   "scripts": {
