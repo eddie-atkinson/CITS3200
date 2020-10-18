@@ -59,13 +59,14 @@ function generateTableHeader(setData) {
   const sessionKeys = Object.keys(sessions).sort(sorter);
   headerString += '<tr>';
   // Add column for time
-  headerString += '<td class="time header"></td>';
+  headerString += '<td class="time header" style= "width: 5%;"></td>';
   if (setData.setType.toLowerCase() === 'break') {
     return '';
   }
+  const size = 95 / sessionKeys.length;
   sessionKeys.forEach((sessionKey) => {
     headerString += `
-    <td class='header'>
+    <td class='header' style='width: ${size}%;'>
         <h5>
         ${sessions[sessionKey].sessionTitle} -
         ${sessions[sessionKey].sessionLocation}\n
@@ -79,6 +80,7 @@ function generateTableHeader(setData) {
     </td>`;
   });
   headerString += '</tr>';
+
   return headerString;
 }
 
@@ -217,8 +219,10 @@ function parseSets(setsData, sessionsData) {
   const finalData = {};
   Object.keys(setsData).forEach((key) => {
     const {
-      Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
-    } = setsData[key];
+      Set, Session, Title, Chair, Institution, Track, Type, Location, Day, Logo,
+    } = setsData[
+      key
+    ];
     const confsArr = sessionsData[Session];
     if (!confsArr) {
       throw new Error(
@@ -242,6 +246,7 @@ function parseSets(setsData, sessionsData) {
         institution: Institution,
         sessionTrack: Track,
         sessionLocation: Location,
+        sessionSponsor: Logo,
       };
       finalData[Day][Set].conferences.push(...confsArr);
     }
