@@ -3,7 +3,7 @@ import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
-import { validateSession } from './validation';
+import { validateSession, validateSet } from './validation';
 
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
@@ -217,16 +217,14 @@ function parseSessions(sessionsData) {
 
 function parseSets(setsData, sessionsData) {
   const finalData = {};
-  Object.keys(setsData).forEach((key) => {
+  Object.keys(setsData).forEach((setKey) => {
     const {
       Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
-    } = setsData[key];
+    } = setsData[
+      setKey
+    ];
     const confsArr = sessionsData[Session];
-    if (!confsArr) {
-      throw new Error(
-        `Set ${Set} references session ${Session}, but there are no conferences specified for session ${Session}`,
-      );
-    }
+    validateSet(setsData[setKey], confsArr);
     if (!finalData[Day]) {
       finalData[Day] = {};
     }

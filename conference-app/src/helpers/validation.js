@@ -1,3 +1,4 @@
+/* eslint-disable */
 function validNum(num) {
   return !Number.isNaN(Number(num));
 }
@@ -7,12 +8,12 @@ function validateSession(session) {
     Session,
     // eslint-disable-next-line
     __rowNum__: rowNum,
-    'Start Time': startTime,
-    'End Time': endTime,
+    "Start Time": startTime,
+    "End Time": endTime,
   } = session;
   if (!Title) {
     throw new Error(
-      `No title specified for the conference on row ${rowNum + 1} of the Sessions sheet`,
+      `No title specified for the conference on row ${rowNum + 1} of the Sessions sheet`
     );
   }
   if (!validNum(Session)) {
@@ -26,6 +27,48 @@ function validateSession(session) {
   }
 }
 
+function validateSet(set, confsArr) {
+  const {
+    Set,
+    Session,
+    Title,
+    Track,
+    Type,
+    Day,
+    // eslint-disable-next-line
+    __rowNum__: rowNum,
+  } = set;
+  if (!Title) {
+    throw new Error(`Set ${Set} on row ${rowNum + 1} has no title`);
+  }
+  if (!confsArr) {
+    throw new Error(
+      `Set ${Set} on row ${
+        rowNum + 1
+      } references session ${Session}, session ${Session} contains no conferences.`
+    );
+  }
+  if (!Track) {
+    throw new Error(`Set ${Set} "${Title}" on row ${rowNum + 1} has no session track specified`);
+  }
+  if (!Type) {
+    throw new Error(
+      `Set ${Set} "${Title}" on row ${rowNum + 1} does not have a set type specified`
+    );
+  }
+  if (!Day) {
+    throw new Error(`Set ${Set} "${Title}" on row ${rowNum + 1} does not have a day specified`);
+  }
+  if (!validNum(Set)) {
+    throw new Error(`Set "${Title}" on row ${rowNum + 1} has an invalid set number "${Set}"`);
+  }
+  if (!validNum(Session)) {
+    throw new Error(
+      `Set ${Set} "${Title}" on row ${rowNum + 1} has an invalid session number "${Session}"`
+    );
+  }
+}
 module.exports = {
   validateSession,
+  validateSet,
 };
