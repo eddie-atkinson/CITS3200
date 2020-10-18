@@ -3,6 +3,7 @@ import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
+import { validateSession, validateSet } from './validation';
 
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
@@ -64,19 +65,28 @@ function generateTableHeader(setData) {
     return '';
   }
   sessionKeys.forEach((sessionKey) => {
+    const {
+      sessionTitle, sessionLocation, sessionChair, institution,
+    } = sessions[sessionKey];
     headerString += `
     <td class='header'>
         <h5>
-        ${sessions[sessionKey].sessionTitle} -
-        ${sessions[sessionKey].sessionLocation}\n
-        </h5>
-        <span class='authors'>
-        Chair: ${sessions[sessionKey].sessionChair},
+        ${sessionTitle} -
+        ${sessionLocation}\n
+        </h5>`;
+    if (sessionChair) {
+      headerString += `
+      <span class='authors'>
+        Chair: ${sessions[sessionKey].sessionChair}`;
+      if (institution) {
+        headerString += `,
         <span class='underline'>
-        ${sessions[sessionKey].institution}
-        </span>
-        </span>
-    </td>`;
+        ${institution}
+        </span>`;
+      }
+      headerString += '</span>';
+    }
+    headerString += '</td>';
   });
   headerString += '</tr>';
   return headerString;
@@ -201,7 +211,15 @@ function fetchSheets(workbook) {
 
 function parseSessions(sessionsData) {
   const sessionsObj = {};
+  const firstDay = sessionsData[0].Day;
+  console.log(firstDay);
   Object.values(sessionsData).forEach((session) => {
+    if (session.Day !== firstDay) {
+      throw new Error(
+        'Set contains sessions on differing days, all sessions in a set should occur on the same day',
+      );
+    }
+    validateSession(session);
     if (!sessionsObj[session.Session]) {
       sessionsObj[session.Session] = [];
     }
@@ -215,16 +233,15 @@ function parseSessions(sessionsData) {
 
 function parseSets(setsData, sessionsData) {
   const finalData = {};
-  Object.keys(setsData).forEach((key) => {
+  Object.keys(setsData).forEach((setKey) => {
     const {
       Set, Session, Title, Chair, Institution, Track, Type, Location, Day,
-    } = setsData[key];
+    } = setsData[
+      setKey
+    ];
     const confsArr = sessionsData[Session];
-    if (!confsArr) {
-      throw new Error(
-        `Set ${Set} references session ${Session}, but there are no conferences specified for session ${Session}`,
-      );
-    }
+    validateSet(setsData[setKey], confsArr);
+
     if (!finalData[Day]) {
       finalData[Day] = {};
     }
