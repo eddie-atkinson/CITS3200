@@ -3,6 +3,7 @@ import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
+import { validateSession } from './validation';
 
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
@@ -202,6 +203,7 @@ function fetchSheets(workbook) {
 function parseSessions(sessionsData) {
   const sessionsObj = {};
   Object.values(sessionsData).forEach((session) => {
+    validateSession(session);
     if (!sessionsObj[session.Session]) {
       sessionsObj[session.Session] = [];
     }
