@@ -44,6 +44,9 @@ a {
 a:hover {
   text-decoration: underline;
 }
+table {
+  min-width: 600px;
+}
 `;
 
 const orange = `
