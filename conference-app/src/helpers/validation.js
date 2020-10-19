@@ -68,7 +68,20 @@ function validateSet(set, confsArr) {
     );
   }
 }
+
+function checkSessionSets(setsData, sessionsData) {
+  const setSessionList = new Set();
+  Object.values(setsData).forEach((set) => setSessionList.add(set.Session));
+  Object.keys(sessionsData).forEach((sessionNum) => {
+    if (!setSessionList.has(parseInt(sessionNum, 10))) {
+      throw new Error(
+        `Session ${sessionNum} is referenced in the Sessions sheet but not by any set`
+      );
+    }
+  });
+}
 module.exports = {
   validateSession,
   validateSet,
+  checkSessionSets,
 };

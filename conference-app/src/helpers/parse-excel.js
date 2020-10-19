@@ -3,7 +3,7 @@ import numWords from 'num-words';
 import {
   base, orange, blue, turq, green,
 } from './styles';
-import { validateSession, validateSet } from './validation';
+import { validateSession, validateSet, checkSessionSets } from './validation';
 
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
@@ -214,7 +214,6 @@ function fetchSheets(workbook) {
 function parseSessions(sessionsData) {
   const sessionsObj = {};
   const firstDay = sessionsData[0].Day;
-  console.log(firstDay);
   Object.values(sessionsData).forEach((session) => {
     if (session.Day !== firstDay) {
       throw new Error(
@@ -283,6 +282,9 @@ export default function excelToHTML(formData) {
   let sessionsData = XLSX.utils.sheet_to_json(sessionsSheet);
   const setsData = XLSX.utils.sheet_to_json(sessionSetsSheet);
   sessionsData = parseSessions(sessionsData);
+  checkSessionSets(setsData, sessionsData);
+  // TODO: check for each conference that it references a valid session
+
   const parsedData = parseSets(setsData, sessionsData);
   return dataToHTML(parsedData, themeColour, confName, cssData);
 }
